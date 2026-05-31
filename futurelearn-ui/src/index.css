@@ -1,0 +1,1059 @@
+/* --- 1. POLICE ET FOND DE PAGE --- */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  min-height: 100vh;
+  background-color: #000;
+  overflow-x: hidden;
+}
+
+/* --- 2. DIAPORAMA ET EFFET VERRE GLOBAL --- */
+.slideshow-container {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  z-index: -2;
+}
+
+.slide-image {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  object-fit: cover;
+  transition: opacity 1.5s ease-in-out;
+  opacity: 0;
+}
+
+.slide-image.active {
+  opacity: 1;
+}
+
+.glass-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(255, 255, 255, 0.20); /* Voile blanc très léger */
+  backdrop-filter: blur(5px); /* Flou léger pour voir l'école */
+  -webkit-backdrop-filter: blur(5px);
+  z-index: -1;
+}
+
+/* --- 3. COMPOSANTS GLASSMORPHISM --- */
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* --- 4. ANIMATIONS --- */
+
+/* Animation de chargement bouton (Spin) */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.spin { animation: spin 1s linear infinite; }
+
+/* Animation du cercle qui pulse (Prof) */
+@keyframes ripple {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+/* Animation d'entrée des notifications */
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* Animation d'entrée du Chat à droite */
+@keyframes slideInRight {
+  from { transform: translateX(50px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* Animation des 3 points (Salle d'attente) */
+@keyframes l3 {
+    20%{background-position:0% 0%, 50% 50%,100% 50%}
+    40%{background-position:0% 100%, 50% 0%,100% 50%}
+    60%{background-position:0% 50%, 50% 100%,100% 0%}
+    80%{background-position:0% 50%, 50% 50%,100% 100%}
+}
+
+/* --- 5. STYLES SPÉCIFIQUES --- */
+
+.participant-circle-container {
+  position: relative;
+  width: 160px; height: 160px;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.circle-animation {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  border: 4px solid #6d28d9;
+  border-radius: 50%;
+  animation: ripple 2s infinite ease-out;
+  box-sizing: border-box;
+}
+
+.pin-display-animation {
+  font-size: 70px;
+  font-weight: 900;
+  color: #6d28d9;
+  letter-spacing: 12px;
+  margin: 20px 0;
+  text-shadow: 0 10px 20px rgba(109, 40, 217, 0.2);
+}
+
+.main-action-btn {
+  background: linear-gradient(45deg, #6d28d9, #8b5cf6);
+  color: white; border: none; padding: 12px 25px; border-radius: 12px;
+  font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 10px;
+  box-shadow: 0 5px 15px rgba(109, 40, 217, 0.4);
+}
+
+.toast-notification {
+  position: fixed; top: 20px; right: 20px;
+  background: white; padding: 15px 25px; border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  display: flex; align-items: center; gap: 12px;
+  border-left: 5px solid #10b981;
+  animation: slideIn 0.5s ease-out forwards;
+  z-index: 2000;
+}
+
+.loader-dots {
+  width: 40px;
+  height: 10px;
+  display: flex;
+  justify-content: space-between;
+  margin: 20px auto;
+}
+
+.loader-dots::before,
+.loader-dots::after,
+.loader-dots {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #6d28d9; /* Violet */
+}
+
+.loader-dots {
+  background-color: transparent;
+  position: relative;
+}
+
+.loader-dots::before {
+  position: absolute;
+  left: 0;
+  animation: dot-jump 0.5s infinite alternate;
+}
+
+.loader-dots::after {
+  position: absolute;
+  right: 0;
+  animation: dot-jump 0.5s infinite alternate 0.4s;
+}
+
+/* Le point du milieu */
+.loader-dots-inner {
+    width: 10px;
+    height: 10px;
+    background-color: #6d28d9;
+    border-radius: 50%;
+    margin: 0 auto;
+    animation: dot-jump 0.5s infinite alternate 0.2s;
+}
+
+@keyframes dot-jump {
+  from { transform: translateY(0); }
+  to { transform: translateY(-10px); }
+}
+
+.fadeIn {
+  animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Animation du rond bleu pulsant */
+.pulse-blue {
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  border: 4px solid #3b82f6; /* Bleu clignotant */
+  animation: pulse-blue-anim 2s infinite;
+}
+
+@keyframes pulse-blue-anim {
+  0% { transform: scale(0.8); opacity: 1; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fadeIn { animation: fadeIn 0.4s ease-out forwards; }
+
+.glass-card {
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  border-radius: 20px;
+}
+
+/* Scrollbar personnalisée */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #6d28d9; border-radius: 10px; }
+
+
+/* Animation des points d'attente */
+.loader-dots:after {
+  content: ' .';
+  animation: dots 1.5s steps(5, end) infinite;
+}
+
+@keyframes dots {
+  0%, 20% { color: rgba(0,0,0,0); text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0); }
+  40% { color: #6d28d9; text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0); }
+  60% { text-shadow: .25em 0 0 #6d28d9, .5em 0 0 rgba(0,0,0,0); }
+  80%, 100% { text-shadow: .25em 0 0 #6d28d9, .5em 0 0 #6d28d9; }
+}
+
+/* Le badge LIVE qui pulse en rouge */
+.pulse-red {
+  animation: pulse-red-animation 2s infinite;
+}
+
+@keyframes pulse-red-animation {
+  0% { box-shadow: 0 0 0 0px rgba(239, 68, 68, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+  100% { box-shadow: 0 0 0 0px rgba(239, 68, 68, 0); }
+}
+
+/* --- CONFIGURATION MOBILE --- */
+@media (max-width: 768px) {
+   
+    /* Les cartes occupent toute la largeur */
+    .glass-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 5px 0 !important;
+        height: auto !important;
+        padding: 15px !important;
+    }
+
+    /* La sidebar XP de l'étudiant passe en haut */
+    div[style*="sidebarXPStyle"] {
+        width: 100% !important;
+        height: auto !important;
+        flex-direction: row !important;
+        justify-content: space-around !important;
+    }
+
+    /* Masquer certains détails sur mobile pour gagner de la place */
+    .ranking-row-anim div[style*="statusBadgeChic"] {
+        display: none !important;
+    }
+
+    /* Grossir les boutons pour les doigts */
+    button {
+        padding: 15px !important;
+        min-height: 50px;
+    }
+
+    /* La barre d'outils du prof devient fixe en bas */
+    div[style*="toolbarStyle"] {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        padding: 5px !important;
+        gap: 10px !important;
+        justify-content: center !important;
+        z-index: 1000;
+    }
+
+    /* Adapter le texte */
+    h1 { font-size: 20px !important; }
+    h2 { font-size: 18px !important; }
+    
+    /* Le code PIN s'affiche en gros */
+    .pin-display-animation {
+        font-size: 40px !important;
+        letter-spacing: 5px !important;
+    }
+
+    /* Chat sur mobile : il prend tout l'écran quand il est ouvert */
+    div[style*="sideChatPanel"] {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100% !important;
+        height: 100% !important;
+        z-index: 2000;
+    }
+}
+
+/* --- ANIMATIONS POUR FLUIDITÉ --- */
+.fadeIn {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- RESPONSIVE GLOBAL --- */
+
+@media (max-width: 768px) {
+    /* Forcer toutes les cartes à prendre toute la largeur */
+    .glass-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 20px 15px !important;
+        margin-bottom: 10px !important;
+        border-radius: 15px !important;
+    }
+
+    /* Adapter les titres Question */
+    h1 { font-size: 22px !important; }
+    h2 { font-size: 18px !important; }
+
+    /* --- SPECIFIQUE QCM --- */
+    /* Réduire la hauteur du graphique sur mobile pour éviter de scroller */
+    .recharts-responsive-container {
+        height: 250px !important;
+    }
+    /* Masquer les labels de l'axe X s'ils sont trop longs ou les incliner */
+    .recharts-cartesian-axis-tick-value {
+        font-size: 10px !important;
+    }
+
+    /* --- SPECIFIQUE NUAGE DE MOTS --- */
+    /* Limiter la taille max des mots pour qu'ils ne sortent pas de l'écran */
+    div[style*="cloudArea"] span {
+        font-size: clamp(14px, 8vw, 35px) !important;
+        margin: 5px !important;
+    }
+
+    /* --- SPECIFIQUE QUESTION OUVERTE --- */
+    /* Passer à 1 seule colonne sur petit mobile */
+    div[style*="gridTemplateColumns"] {
+        grid-template-columns: 1fr !important;
+        gap: 10px !important;
+    }
+
+    /* --- SPECIFIQUE ECHELLE --- */
+    /* Réduire la taille des étoiles */
+    svg[style*="size: 30"] {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+/* --- OPTIMISATION POUR LES TRÈS PETITS ÉCRANS (iPhone SE, etc.) --- */
+@media (max-width: 400px) {
+    .pin-display-animation {
+        font-size: 30px !important;
+        letter-spacing: 2px !important;
+    }
+    
+    .main-action-btn {
+        padding: 10px !important;
+        font-size: 12px !important;
+    }
+}
+
+.pulse-green-small {
+    width: 8px;
+    height: 8px;
+    background-color: #10b981;
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+}
+
+@keyframes pulse-red {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+.pulse-red {
+  width: 10px;
+  height: 10px;
+  background: #ef4444;
+  border-radius: 50%;
+  margin-right: 12px;
+  animation: pulse-red 2s infinite;
+}
+
+/* --- RESPONSIVE APP LAYOUTS --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+img, svg, canvas {
+  max-width: 100%;
+}
+
+input, textarea, select, button {
+  font: inherit;
+}
+
+.teacher-dashboard-layout,
+.student-live-layout,
+.live-control-root {
+  width: 100%;
+}
+
+.teacher-content,
+.student-session-card,
+.live-content-card {
+  min-width: 0;
+}
+
+.teacher-sidebar {
+  flex-shrink: 0;
+}
+
+.student-live-layout {
+  align-items: stretch;
+}
+
+.student-xp-sidebar {
+  flex-shrink: 0;
+}
+
+.student-question-box,
+.qcm-chart-container {
+  min-width: 0;
+}
+
+.qcm-chart-container {
+  height: clamp(260px, 45vh, 400px) !important;
+  min-height: 260px;
+  overflow: hidden;
+}
+
+.activity-live-header,
+.live-message-tabs {
+  flex-wrap: wrap;
+}
+
+.activity-history-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)) !important;
+  gap: 16px !important;
+}
+
+.waiting-dots {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 46px;
+  margin: 0 auto 18px;
+}
+
+.waiting-dots span {
+  width: 13px;
+  height: 13px;
+  border-radius: 999px;
+  background: #6d28d9;
+  box-shadow: 0 10px 22px rgba(109, 40, 217, 0.25);
+  animation: waiting-dot-bounce 0.9s ease-in-out infinite;
+}
+
+.waiting-dots span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.waiting-dots span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes waiting-dot-bounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.45; }
+  40% { transform: translateY(-12px); opacity: 1; }
+}
+
+/* --- STUDENT SUMMARY LANDSCAPE --- */
+.student-summary-page {
+  min-height: 100vh;
+  padding: clamp(16px, 3vw, 32px);
+  background:
+    radial-gradient(circle at top left, rgba(139, 92, 246, 0.22), transparent 34%),
+    linear-gradient(135deg, #f8fafc 0%, #f5f3ff 48%, #eef2ff 100%);
+}
+
+.student-summary-shell {
+  width: min(1380px, 100%);
+  min-height: calc(100vh - 64px);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.summary-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 22px;
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(124, 58, 237, 0.16);
+  border-radius: 22px;
+  box-shadow: 0 18px 45px rgba(76, 29, 149, 0.12);
+}
+
+.summary-topbar h1 {
+  margin: 6px 0 0;
+  color: #1e1b4b;
+  font-size: clamp(24px, 3vw, 42px);
+  line-height: 1;
+}
+
+.summary-session-badge {
+  display: inline-flex;
+  max-width: 100%;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #ede9fe;
+  color: #6d28d9;
+  font-size: 12px;
+  font-weight: 800;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.summary-home-btn {
+  border: 0;
+  border-radius: 999px;
+  background: #1e1b4b;
+  color: #fff;
+  padding: 12px 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.summary-landscape {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(240px, 0.8fr) minmax(360px, 1.2fr) minmax(360px, 1.1fr);
+  gap: 18px;
+  min-height: 0;
+}
+
+.summary-panel {
+  min-width: 0;
+  min-height: 0;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(124, 58, 237, 0.14);
+  border-radius: 24px;
+  box-shadow: 0 18px 45px rgba(76, 29, 149, 0.10);
+  padding: 22px;
+  overflow: hidden;
+}
+
+.summary-score-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 18px;
+}
+
+.summary-trophy {
+  width: 94px;
+  height: 94px;
+  display: grid;
+  place-items: center;
+  border-radius: 28px;
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  color: #f59e0b;
+  font-size: 46px;
+}
+
+.summary-student-name,
+.summary-rank {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #6d28d9;
+  font-weight: 800;
+}
+
+.summary-xp {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 10px;
+  color: #1e1b4b;
+}
+
+.summary-xp strong {
+  font-size: clamp(48px, 7vw, 82px);
+  line-height: 0.9;
+}
+
+.summary-xp svg {
+  color: #8b5cf6;
+  font-size: 28px;
+}
+
+.summary-mini-stats {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.summary-mini-stats div {
+  padding: 12px 8px;
+  border-radius: 16px;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: #64748b;
+  font-size: 11px;
+}
+
+.summary-mini-stats strong {
+  color: #1e1b4b;
+  font-size: 20px;
+}
+
+.summary-panel-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  color: #6d28d9;
+}
+
+.summary-panel-header h2 {
+  margin: 0;
+  color: #1e1b4b;
+  font-size: 20px;
+}
+
+.summary-scroll {
+  height: calc(100% - 44px);
+  min-height: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-right: 6px;
+}
+
+.summary-scroll.compact {
+  height: 100%;
+  gap: 10px;
+}
+
+.summary-activity-card {
+  border-radius: 18px;
+  background: #fff;
+}
+
+.summary-feedback-grid {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 14px;
+  height: calc(100% - 44px);
+  min-height: 0;
+}
+
+.summary-feedback-column {
+  min-height: 0;
+  border-radius: 18px;
+  background: #faf5ff;
+  border: 1px solid #ede9fe;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.summary-feedback-column h3 {
+  margin: 0 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #4c1d95;
+  font-size: 14px;
+}
+
+.summary-message {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 14px;
+  background: #fff;
+  border-left: 3px solid #c4b5fd;
+}
+
+.summary-message.teacher {
+  border-left-color: #6d28d9;
+}
+
+.summary-message-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.summary-message-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  color: #6d28d9;
+  font-size: 12px;
+}
+
+.summary-message-meta span {
+  color: #94a3b8;
+}
+
+.summary-message p {
+  margin: 4px 0 0;
+  color: #334155;
+  font-size: 13px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.summary-empty {
+  margin: auto;
+  color: #a78bfa;
+  font-size: 13px;
+  text-align: center;
+}
+
+.summary-loading {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  background: #f5f3ff;
+  color: #4c1d95;
+}
+
+@media (max-width: 1100px) {
+  .teacher-dashboard-layout,
+  .student-live-layout {
+    flex-direction: column !important;
+    padding: 14px !important;
+  }
+
+  .teacher-sidebar {
+    width: 100% !important;
+    min-height: auto !important;
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    padding: 16px !important;
+  }
+
+  .teacher-sidebar > div:first-child {
+    grid-column: 1 / -1;
+    margin-bottom: 8px !important;
+  }
+
+  .student-xp-sidebar {
+    width: 100% !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  .student-session-card {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 62vh;
+  }
+
+  .student-side-chat {
+    width: 100% !important;
+    height: 70vh !important;
+  }
+
+  .summary-landscape {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-score-panel {
+    justify-content: flex-start;
+  }
+
+  .summary-panel {
+    max-height: none;
+  }
+
+  .summary-scroll,
+  .summary-feedback-grid {
+    height: auto;
+    max-height: 70vh;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  .teacher-dashboard-layout,
+  .student-live-layout {
+    padding: 10px !important;
+    gap: 12px !important;
+  }
+
+  .teacher-form-card,
+  .student-session-card,
+  .student-question-box,
+  .live-content-card {
+    padding: 18px !important;
+    border-radius: 18px !important;
+  }
+
+  .live-control-stage {
+    align-items: flex-start !important;
+    padding: 10px;
+  }
+
+  .live-pin-grid,
+  .live-private-chat {
+    flex-direction: column !important;
+  }
+
+  .live-private-chat {
+    height: 72vh !important;
+  }
+
+  .live-private-list,
+  .live-private-thread {
+    width: 100% !important;
+  }
+
+  .live-private-list {
+    max-height: 190px;
+    border-right: 0 !important;
+    border-bottom: 1px solid #eee;
+  }
+
+  .live-message-tabs {
+    gap: 8px !important;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 6px;
+  }
+
+  .live-message-tabs h2 {
+    flex: 0 0 auto;
+    font-size: 14px !important;
+    white-space: nowrap;
+  }
+
+  .activity-live-header {
+    align-items: stretch !important;
+  }
+
+  .activity-live-header button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .qcm-chart-container {
+    height: 280px !important;
+    padding: 10px !important;
+    border-radius: 14px !important;
+  }
+
+  .recharts-cartesian-axis-tick-value {
+    font-size: 10px !important;
+  }
+
+  .student-summary-page {
+    padding: 10px;
+  }
+
+  .student-summary-shell {
+    min-height: auto;
+  }
+
+  .summary-topbar {
+    align-items: flex-start;
+    flex-direction: column;
+    border-radius: 18px;
+  }
+
+  .summary-home-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .summary-panel {
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  .summary-mini-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .summary-feedback-grid {
+    grid-template-rows: none;
+    grid-template-columns: 1fr;
+    max-height: none;
+  }
+
+  .summary-scroll {
+    max-height: 60vh;
+  }
+}
+
+@media (max-width: 480px) {
+  .pin-display-animation {
+    font-size: 34px !important;
+    letter-spacing: 3px !important;
+  }
+
+  .student-side-chat {
+    height: 78vh !important;
+    padding: 14px !important;
+  }
+
+  .summary-xp strong {
+    font-size: 48px;
+  }
+}
+
+/* --- TYPING INDICATOR & CUSTOM TOAST NOTIFICATIONS --- */
+
+.typing-indicator-container {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(109, 40, 217, 0.08);
+    color: #6d28d9;
+    padding: 8px 16px;
+    border-radius: 16px;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 8px 15px;
+    align-self: flex-start;
+    animation: fadeIn 0.3s ease-out;
+    box-shadow: 0 4px 12px rgba(109, 40, 217, 0.05);
+    border: 1px solid rgba(109, 40, 217, 0.15);
+}
+
+.typing-dots {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+}
+
+.typing-dots span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #6d28d9;
+    animation: typing-dot-bounce 1.4s infinite ease-in-out both;
+}
+
+.typing-dots span:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.typing-dots span:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+@keyframes typing-dot-bounce {
+    0%, 80%, 100% { 
+        transform: scale(0);
+        opacity: 0.5;
+    } 
+    40% { 
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.toast-notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 16px 24px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    z-index: 9999;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    min-width: 300px;
+    max-width: 450px;
+    animation: slideInRight 0.3s ease-out forwards;
+}
+
+.toast-success {
+    border-left: 6px solid #10b981;
+}
+
+.toast-error {
+    border-left: 6px solid #ef4444;
+}
+
+.toast-notification b {
+    color: #1e293b;
+    font-size: 15px;
+    display: block;
+}
+
+.toast-notification p {
+    color: #64748b;
+    margin: 2px 0 0 0;
+    font-size: 12px;
+}
