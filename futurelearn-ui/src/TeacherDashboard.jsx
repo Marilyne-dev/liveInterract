@@ -139,58 +139,17 @@ const closeActiveSession = async () => {
 const handleLogout = async () => {
     if(window.confirm("Voulez-vous vous déconnecter ?")) {
         await closeActiveSession();
-        localStorage.removeItem('logged_teacher'); // On efface la mémoire
+        localStorage.removeItem('logged_teacher');
         localStorage.removeItem('active_session');
+        localStorage.removeItem('auth_user');      // ← AJOUTER
+        localStorage.removeItem('t_tab');          // ← AJOUTER
         setSessionData(null);
-        setTeacher(null); // On remet l'état à zéro, l'écran de login reviendra
+        setTeacher(null);
+        
+        // ← AJOUTER : utiliser le onLogout d'App.jsx pour rediriger vers /
+        if (props.onLogout) props.onLogout();
     }
 };
-
-
-// --- AJOUTE CE BLOC JUSTE AVANT LE "return (<> ... )" ---
-if (!teacher) {
-    return (
-        <>
-            <BackgroundSlideshow />
-            <div style={centerFlex}>
-                <div className="glass-card fadeIn" style={loginBoxStyle}>
-                    <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-                                                <img src="/logo.png" alt="Logo" style={{ width: '300px' }} />
-                    </div>
-                    <h2 style={{color:'#1e1b4b', textAlign:'center'}}>Espace Enseignant</h2>
-                    <p style={{fontSize:'13px', color:'#64748b', textAlign:'center', marginBottom:'30px'}}>
-                        Identifiez-vous avec votre compte pour gérer vos sessions.
-                    </p>
-                    
-                    <div style={inputGroup}>
-                        <label style={labelStyle}>EMAIL</label>
-                        <input type="email" id="t_email" placeholder="professeur@ecole.com" style={inputStyle} />
-                    </div>
-
-                    <button 
-                        style={buttonStyle}
-                        onClick={async () => {
-                            const email = document.getElementById('t_email').value;
-                            if(!email) return alert("Saisissez votre email");
-                            try {
-                                const res = await api.post('/teacher/login', { email });
-                                localStorage.setItem('logged_teacher', JSON.stringify(res.data));
-                                setTeacher(res.data);
-                            } catch (e) {
-                                alert("Compte introuvable");
-                            }
-                        }}
-                    >
-                        ACCÉDER À MON TABLEAU DE BORD
-                    </button>
-                </div>
-            </div>
-        </>
-    );
-}
-
-// Le grand return (<> ... ) commence ici...
-
 
 
     return (
