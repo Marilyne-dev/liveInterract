@@ -1066,40 +1066,238 @@ const StudentSession = ({ session, onLeave }) => {
              );
          };
 
-        // --- STYLES ---
+                // --- STYLES ---
+        const isMobile = window.innerWidth < 768;
+
         const centeredNoticeStyle = { minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', padding:'24px', position:'relative', zIndex:1 };
         const sessionClosedCardStyle = { width:'100%', maxWidth:'460px', padding:'34px', textAlign:'center', backgroundColor:'rgba(255,255,255,0.94)', borderRadius:'24px' };
         const closedBannerStyle = { margin:'18px auto', maxWidth:'760px', padding:'14px 18px', borderRadius:'14px', backgroundColor:'rgba(109,40,217,0.12)', color:'#4c1d95', fontWeight:'800', textAlign:'center' };
-        const isMobile = window.innerWidth < 768;
-const mainLayout = { display:'flex', flexDirection: isMobile ? 'column' : 'row', gap:'10px', padding: isMobile ? '10px' : '40px', minHeight:'100vh', justifyContent:'center', alignItems: isMobile ? 'stretch' : 'center', position:'relative', zIndex:1 };
-const sessionCardFull = { width:'100%', maxWidth: isMobile ? '100%' : '1100px', height: isMobile ? 'auto' : '80vh', minHeight: isMobile ? '60vh' : 'auto', display:'flex', flexDirection:'column', padding: isMobile ? '15px' : '40px', backgroundColor:'rgba(255,255,255,0.85)', borderRadius:'24px' };
-const sideChatPanel = { width: isMobile ? '100%' : '350px', height: isMobile ? '60vh' : '80vh', display:'flex', flexDirection:'column', backgroundColor:'rgba(255,255,255,0.95)', padding:'15px', borderRadius:'24px' };
-const sidebarXPStyle = { display: isMobile ? 'none' : 'flex', width:'280px', height:'80vh', backgroundColor:'rgba(255,255,255,0.95)', borderRadius:'24px', padding:'30px 20px', flexDirection:'column', boxShadow:'0 10px 40px rgba(0,0,0,0.1)' };
-const chatToggleBtn = { backgroundColor:'#6d28d9', color:'white', border:'none', borderRadius:'15px', padding: isMobile ? '8px 12px' : '12px 20px', cursor:'pointer', fontWeight:'bold', display:'flex', alignItems:'center', gap:'8px', fontSize: isMobile ? '12px' : '14px' };
-const header = { display:'flex', justifyContent:'space-between', alignItems:'center', borderBottom:'1px solid #e2e8f0', paddingBottom:'15px', flexWrap:'wrap', gap:'10px' };
-const pinBadge = { backgroundColor:'#6d28d9', color:'white', padding:'6px 12px', borderRadius:'10px', fontWeight:'bold', fontSize: isMobile ? '12px' : '14px' };
-const contentArea = { flex:1, display:'flex', justifyContent:'center', alignItems:'center', padding: isMobile ? '10px 0' : '20px' };
-const waitingBox = { textAlign:'center', padding: isMobile ? '20px' : '40px' };
-const questionBox = { width:'100%', padding: isMobile ? '15px' : '40px', backgroundColor:'white', borderRadius:'25px', boxShadow:'0 10px 30px rgba(0,0,0,0.05)' };
-const chatInputArea = { display:'flex', gap:'8px', marginTop:'10px' };
-const chatInput = { flex:1, padding:'10px', borderRadius:'10px', border:'1px solid #e2e8f0', outline:'none', fontSize:'14px' };
-const sendBtn = { backgroundColor:'#6d28d9', color:'white', border:'none', borderRadius:'10px', width:'42px', height:'42px', cursor:'pointer', display:'flex', justifyContent:'center', alignItems:'center', flexShrink:0 };
-const tabHeader = { display:'flex', justifyContent:'space-between', alignItems:'center', borderBottom:'1px solid #eee', paddingBottom:'10px', marginBottom:'10px', overflowX:'auto' };
-const tabInactive = { fontSize: isMobile ? '11px' : '14px', color:'#94a3b8', cursor:'pointer', padding:'5px 8px', borderRadius:'8px', fontWeight:'500', whiteSpace:'nowrap' };
-const tabActive = { ...tabInactive, color:'#6d28d9', backgroundColor:'rgba(109,40,217,0.1)', fontWeight:'bold' };
-const xpCounterStyle = { fontSize:'36px', fontWeight:'900', color:'#f59e0b', margin:'10px 0' };
-const myBubble = { alignSelf:'flex-end', backgroundColor:'#6d28d9', color:'white', padding:'8px 12px', borderRadius:'18px 18px 5px 18px', maxWidth:'85%', marginBottom:'8px', wordBreak:'break-word', fontSize:'14px' };
-const otherBubble = { alignSelf:'flex-start', backgroundColor:'white', color:'#374151', padding:'8px 12px', borderRadius:'18px 18px 18px 5px', maxWidth:'85%', marginBottom:'8px', wordBreak:'break-word', fontSize:'14px', boxShadow:'0 2px 8px rgba(0,0,0,0.1)' };
-const reactionSmallBtn = { background:'none', border:'none', color:'#94a3b8', cursor:'pointer', fontSize:'12px', padding:'2px 5px', borderRadius:'10px' };
-const xpValue = { fontSize:'48px', fontWeight:'900', color:'#f59e0b', margin:'10px 0' };
-const sessionCardWithChat = { ...sessionCardFull };
-const btnQuit = { backgroundColor:'#ef4444', color:'white', border:'none', padding:'12px 25px', borderRadius:'8px', cursor:'pointer', fontWeight:'bold', marginTop:'20px' };
-const interactionBar = { display:'flex', justifyContent:'space-between', alignItems:'center', borderTop:'1px solid #e2e8f0', paddingTop:'20px' };
-const reactionGroup = { display:'flex', gap:'15px', alignItems:'center' };
-const reactionBtn = { width:'45px', height:'45px', borderRadius:'50%', border:'none', backgroundColor:'white', cursor:'pointer', fontSize:'20px', display:'flex', justifyContent:'center', alignItems:'center' };
-const messageHistory = { flex:1, overflowY:'auto', display:'flex', flexDirection:'column', gap:'10px', paddingRight:'5px' };
-const centeredNoticeStyle = { minHeight:'100vh', display:'flex', alignItems:'center', justifyContent:'center', padding:'24px', position:'relative', zIndex:1 };
-const sessionClosedCardStyle = { width:'100%', maxWidth:'460px', padding:'34px', textAlign:'center', backgroundColor:'rgba(255,255,255,0.94)', borderRadius:'24px' };
-const closedBannerStyle = { margin:'18px auto', maxWidth:'760px', padding:'14px 18px', borderRadius:'14px', backgroundColor:'rgba(109,40,217,0.12)', color:'#4c1d95', fontWeight:'800', textAlign:'center' };
-       
+
+        // LAYOUT GÉNÉRAL
+        const mainLayout = {
+            display: 'flex',
+            flexDirection: isMobile ? 'column' : 'row',
+            gap: isMobile ? '8px' : '10px',
+            padding: isMobile ? '8px' : '40px',
+            minHeight: '100vh',
+            justifyContent: 'center',
+            alignItems: isMobile ? 'stretch' : 'center',
+            position: 'relative',
+            zIndex: 1,
+            boxSizing: 'border-box',
+        };
+
+        // SIDEBAR XP — cachée sur mobile
+        const sidebarXPStyle = {
+            display: isMobile ? 'none' : 'flex',
+            width: '280px',
+            height: '80vh',
+            backgroundColor: 'rgba(255,255,255,0.95)',
+            borderRadius: '24px',
+            padding: '30px 20px',
+            flexDirection: 'column',
+            boxShadow: '0 10px 40px rgba(0,0,0,0.1)',
+        };
+
+        // CARTE SESSION
+        const sessionCardFull = {
+            width: '100%',
+            maxWidth: isMobile ? '100%' : '1100px',
+            height: isMobile ? 'auto' : '80vh',
+            minHeight: isMobile ? '40vh' : 'auto',
+            display: 'flex',
+            flexDirection: 'column',
+            padding: isMobile ? '14px' : '40px',
+            backgroundColor: 'rgba(255,255,255,0.92)',
+            borderRadius: isMobile ? '16px' : '24px',
+            boxSizing: 'border-box',
+        };
+        const sessionCardWithChat = { ...sessionCardFull };
+
+        // PANEL CHAT — sur mobile : hauteur fixe, pas de position fixed pour éviter les bugs
+        const sideChatPanel = {
+            width: isMobile ? '100%' : '350px',
+            height: isMobile ? '55vh' : '80vh',
+            maxHeight: isMobile ? '55vh' : 'none',
+            display: 'flex',
+            flexDirection: 'column',
+            backgroundColor: 'rgba(255,255,255,0.98)',
+            padding: isMobile ? '12px' : '15px',
+            borderRadius: isMobile ? '16px' : '24px',
+            boxSizing: 'border-box',
+            overflow: 'hidden',
+        };
+
+        // HEADER
+        const header = {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            borderBottom: '1px solid #e2e8f0',
+            paddingBottom: isMobile ? '10px' : '15px',
+            flexWrap: 'wrap',
+            gap: '8px',
+        };
+
+        const pinBadge = {
+            backgroundColor: '#6d28d9',
+            color: 'white',
+            padding: isMobile ? '4px 10px' : '6px 12px',
+            borderRadius: '10px',
+            fontWeight: 'bold',
+            fontSize: isMobile ? '12px' : '14px',
+        };
+
+        // BOUTON OUVRIR/FERMER CHAT
+        const chatToggleBtn = {
+            backgroundColor: '#6d28d9',
+            color: 'white',
+            border: 'none',
+            borderRadius: '15px',
+            padding: isMobile ? '8px 12px' : '12px 20px',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            fontSize: isMobile ? '12px' : '14px',
+            flexShrink: 0,
+        };
+
+        const contentArea = {
+            flex: 1,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: isMobile ? '8px 0' : '20px',
+        };
+
+        const waitingBox = {
+            textAlign: 'center',
+            padding: isMobile ? '16px' : '40px',
+        };
+
+        const questionBox = {
+            width: '100%',
+            padding: isMobile ? '14px' : '40px',
+            backgroundColor: 'white',
+            borderRadius: '20px',
+            boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
+            boxSizing: 'border-box',
+        };
+
+        // ─── ZONE INPUT CHAT ───────────────────────────────────────────
+        // paddingRight: 70px sur mobile pour ne PAS être caché par le bouton flottant
+        const chatInputArea = {
+            display: 'flex',
+            gap: '8px',
+            marginTop: '8px',
+            flexShrink: 0,
+            alignItems: 'center',
+            paddingRight: isMobile ? '0px' : '0px',   // le bouton envoi est DANS le flex, pas de padding nécessaire
+            boxSizing: 'border-box',
+            width: '100%',
+        };
+
+        const chatInput = {
+            flex: 1,
+            minWidth: 0,          // ← ESSENTIEL : empêche l'input de déborder
+            padding: '10px 12px',
+            borderRadius: '20px',
+            border: '1px solid #e2e8f0',
+            outline: 'none',
+            fontSize: '14px',
+            boxSizing: 'border-box',
+        };
+
+        const sendBtn = {
+            backgroundColor: '#6d28d9',
+            color: 'white',
+            border: 'none',
+            borderRadius: '50%',
+            width: '42px',
+            height: '42px',
+            minWidth: '42px',      // ← ne rétrécit jamais
+            cursor: 'pointer',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            flexShrink: 0,         // ← ne se compresse pas
+        };
+
+        // ONGLETS
+        const tabHeader = {
+            display: 'flex',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            borderBottom: '1px solid #eee',
+            paddingBottom: '8px',
+            marginBottom: '8px',
+            overflowX: 'auto',
+            flexShrink: 0,
+            gap: '4px',
+        };
+
+        const tabInactive = {
+            fontSize: isMobile ? '11px' : '13px',
+            color: '#94a3b8',
+            cursor: 'pointer',
+            padding: '5px 8px',
+            borderRadius: '8px',
+            fontWeight: '500',
+            whiteSpace: 'nowrap',
+            flexShrink: 0,
+        };
+
+        const tabActive = {
+            ...tabInactive,
+            color: '#6d28d9',
+            backgroundColor: 'rgba(109,40,217,0.1)',
+            fontWeight: 'bold',
+        };
+
+        const xpCounterStyle = { fontSize: '36px', fontWeight: '900', color: '#f59e0b', margin: '10px 0' };
+        const xpValue = { fontSize: '48px', fontWeight: '900', color: '#f59e0b', margin: '10px 0' };
+
+        const myBubble = {
+            alignSelf: 'flex-end',
+            backgroundColor: '#6d28d9',
+            color: 'white',
+            padding: '8px 12px',
+            borderRadius: '18px 18px 5px 18px',
+            maxWidth: '85%',
+            marginBottom: '8px',
+            wordBreak: 'break-word',
+            fontSize: '14px',
+        };
+
+        const otherBubble = {
+            alignSelf: 'flex-start',
+            backgroundColor: 'white',
+            color: '#374151',
+            padding: '8px 12px',
+            borderRadius: '18px 18px 18px 5px',
+            maxWidth: '85%',
+            marginBottom: '8px',
+            wordBreak: 'break-word',
+            fontSize: '14px',
+            boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+        };
+
+        const reactionSmallBtn = {
+            background: 'none',
+            border: 'none',
+            color: '#94a3b8',
+            cursor: 'pointer',
+            fontSize: '12px',
+            padding: '2px 5px',
+            borderRadius: '10px',
+        };
+
+        const btnQuit = { backgroundColor: '#ef4444', color: 'white', border: 'none', padding: '12px 25px', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', marginTop: '20px' };
+        const interactionBar = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid #e2e8f0', paddingTop: '20px' };
+        const reactionGroup = { display: 'flex', gap: '15px', alignItems: 'center' };
+        const reactionBtn = { width: '45px', height: '45px', borderRadius: '50%', border: 'none', backgroundColor: 'white', cursor: 'pointer', fontSize: '20px', display: 'flex', justifyContent: 'center', alignItems: 'center' };
+        const messageHistory = { flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '10px', paddingRight: '5px' };
+
         export default StudentSession;
