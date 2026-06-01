@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB; // <--- Ajoute ça pour la route moodle-users
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\AuthController;
 
 // --- ROUTES STANDARDS (Prof & Étudiant) ---
 Route::post('/broadcasting/auth', [SessionController::class, 'authenticateBroadcast']);
@@ -114,3 +115,6 @@ Route::get('/test-ai-models', function() {
     $url = "https://generativelanguage.googleapis.com/v1/models?key=" . $key;
     return Http::withOptions(['verify' => false])->get($url)->json();
 });
+
+Route::post('/auth/register', [AuthController::class, 'register']);
+Route::post('/auth/login',    [AuthController::class, 'login']);
