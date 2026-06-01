@@ -9,7 +9,7 @@ import {
     FaBook, FaClock, FaTrash, FaPlayCircle, FaCheckCircle, FaUserShield, FaHistory, FaPowerOff 
 } from 'react-icons/fa';
 
-const TeacherDashboard = () => {
+const TeacherDashboard = (props) => {
     // --- ÉTATS ---
      const [teacher, setTeacher] = useState(null);
             const [activeTab, setActiveTab] = useState(() => localStorage.getItem('t_tab') || 'create');
@@ -29,19 +29,24 @@ const TeacherDashboard = () => {
     // --- 1. PERSISTANCE (RESTER DANS LA SESSION AU REFRESH) ---
      // --- 1. PERSISTANCE (RESTER CONNECTÉ AUTOMATIQUEMENT) ---
         useEffect(() => {
-            // ÉTAPE A : On regarde si le prof s'était déjà connecté
-            const savedTeacher = localStorage.getItem('logged_teacher');
-            if (savedTeacher) {
-                // Si oui, on le connecte directement sans rien demander !
-                setTeacher(JSON.parse(savedTeacher));
-            }
+    // Priorité 1 : la prop user venant d'App.jsx (après login/register)
+    if (props.user) {
+        const t = {
+            moodle_user_id: props.user.id,
+            firstname: props.user.name,
+            lastname: ''
+        };
+        setTeacher(t);
+        localStorage.setItem('logged_teacher', JSON.stringify(t));
+    } else {
+        // Priorité 2 : localStorage (refresh de page)
+        const savedTeacher = localStorage.getItem('logged_teacher');
+        if (savedTeacher) setTeacher(JSON.parse(savedTeacher));
+    }
 
-            // ÉTAPE B : Persistance de la session de cours si une était ouverte
-            const savedSession = localStorage.getItem('active_session');
-            if (savedSession) {
-                setSessionData(JSON.parse(savedSession));
-            }
-        }, []); // [] signifie : s'exécute une seule fois au chargement de la page
+    const savedSession = localStorage.getItem('active_session');
+    if (savedSession) setSessionData(JSON.parse(savedSession));
+}, []);
 
     const saveSession = (data) => {
         setSessionData(data);
