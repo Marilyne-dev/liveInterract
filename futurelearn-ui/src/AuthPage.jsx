@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from './api';
-import { FaUser, FaEnvelope, FaLock, FaSpinner, FaGraduationCap, FaChalkboardTeacher, FaShieldAlt, FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaLock, FaSpinner, FaGraduationCap, FaChalkboardTeacher, FaShieldAlt, FaEye, FaEyeSlash, FaCheckCircle } from 'react-icons/fa';
 
-// --- SLIDESHOW INTÉGRÉ (partie gauche) ---
 const SlideshowPanel = () => {
     const images = ["image1.jpg", "image9.jpg", "image3.jpg", "image4.jpg", "image8.jpg"];
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -17,14 +16,7 @@ const SlideshowPanel = () => {
     return (
         <div style={slideshowWrap}>
             {images.map((img, index) => (
-                <div
-                    key={index}
-                    style={{
-                        ...slideStyle,
-                        backgroundImage: `url(${img})`,
-                        opacity: index === currentIndex ? 1 : 0,
-                    }}
-                />
+                <div key={index} style={{ ...slideStyle, backgroundImage: `url(${img})`, opacity: index === currentIndex ? 1 : 0 }} />
             ))}
             <div style={slideshowOverlay} />
             <div style={slideshowContent}>
@@ -33,18 +25,12 @@ const SlideshowPanel = () => {
                 <p style={slideshowSub}>La plateforme interactive qui transforme chaque cours en expérience vivante.</p>
                 <div style={{ display: 'flex', gap: '8px', marginTop: '40px' }}>
                     {images.map((_, i) => (
-                        <div
-                            key={i}
-                            onClick={() => setCurrentIndex(i)}
-                            style={{
-                                width: i === currentIndex ? '28px' : '8px',
-                                height: '8px',
-                                borderRadius: '4px',
-                                backgroundColor: i === currentIndex ? 'white' : 'rgba(255,255,255,0.4)',
-                                transition: 'all 0.4s ease',
-                                cursor: 'pointer',
-                            }}
-                        />
+                        <div key={i} onClick={() => setCurrentIndex(i)} style={{
+                            width: i === currentIndex ? '28px' : '8px',
+                            height: '8px', borderRadius: '4px', cursor: 'pointer',
+                            backgroundColor: i === currentIndex ? 'white' : 'rgba(255,255,255,0.4)',
+                            transition: 'all 0.4s ease',
+                        }} />
                     ))}
                 </div>
             </div>
@@ -52,7 +38,6 @@ const SlideshowPanel = () => {
     );
 };
 
-// --- COMPOSANT PRINCIPAL ---
 const AuthPage = ({ onAuthSuccess }) => {
     const [mode, setMode] = useState('login');
     const [name, setName] = useState('');
@@ -62,6 +47,7 @@ const AuthPage = ({ onAuthSuccess }) => {
     const [role, setRole] = useState('student');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [successMsg, setSuccessMsg] = useState(''); // ← MESSAGE SUCCÈS
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
 
@@ -76,9 +62,27 @@ const AuthPage = ({ onAuthSuccess }) => {
         e.preventDefault();
         setLoading(true);
         setError('');
+        setSuccessMsg('');
         try {
             const res = await api.post('/auth/login', { email, password });
             localStorage.setItem('auth_user', JSON.stringify(res.data.user));
+            // Compatibilité TeacherDashboard
+            if (res.data.user.role === 'teacher') {
+                localStorage.setItem('logged_teacher', JSON.stringify({
+                    moodle_user_id: res.data.user.id,
+                    firstname: res.data.user.name,
+                    lastname: ''
+                }));
+            }
+            // Compatibilité StudentJoin — on saute l'écran email
+            if (res.data.user.role === 'student') {
+                localStorage.setItem('my_student_id', 'STU-' + res.data.user.id);
+                localStorage.setItem('student_data', JSON.stringify({
+                    student_id: 'STU-' + res.data.user.id,
+                    firstname: res.data.user.name,
+                    email: res.data.user.email
+                }));
+            }
             onAuthSuccess(res.data.user);
         } catch (err) {
             setError(err.response?.data?.message || 'Email ou mot de passe incorrect');
@@ -90,13 +94,36 @@ const AuthPage = ({ onAuthSuccess }) => {
     const handleRegister = async (e) => {
         e.preventDefault();
         setError('');
+        setSuccessMsg('');
         if (password !== confirmPassword) return setError('Les mots de passe ne correspondent pas');
         if (password.length < 6) return setError('Le mot de passe doit contenir au moins 6 caractères');
         setLoading(true);
         try {
             const res = await api.post('/auth/register', { name, email, password, role });
+            // Compatibilité
+            if (res.data.user.role === 'teacher') {
+                localStorage.setItem('logged_teacher', JSON.stringify({
+                    moodle_user_id: res.data.user.id,
+                    firstname: res.data.user.name,
+                    lastname: ''
+                }));
+            }
+            if (res.data.user.role === 'student') {
+                localStorage.setItem('my_student_id', 'STU-' + res.data.user.id);
+                localStorage.setItem('student_data', JSON.stringify({
+                    student_id: 'STU-' + res.data.user.id,
+                    firstname: res.data.user.name,
+                    email: res.data.user.email
+                }));
+            }
             localStorage.setItem('auth_user', JSON.stringify(res.data.user));
-            onAuthSuccess(res.data.user);
+
+            // Afficher le message de succès 1.5s puis rediriger
+            setSuccessMsg('Compte créé avec succès ! Redirection...');
+            setTimeout(() => {
+                onAuthSuccess(res.data.user);
+            }, 1500);
+
         } catch (err) {
             setError(err.response?.data?.message || "Erreur lors de l'inscription");
         } finally {
@@ -105,66 +132,64 @@ const AuthPage = ({ onAuthSuccess }) => {
     };
 
     const roles = [
-        { value: 'student',  label: 'Étudiant',      icon: <FaGraduationCap /> },
-        { value: 'teacher',  label: 'Enseignant',     icon: <FaChalkboardTeacher /> },
-        { value: 'admin',    label: 'Admin',          icon: <FaShieldAlt /> },
+        { value: 'student', label: 'Étudiant',    icon: <FaGraduationCap /> },
+        { value: 'teacher', label: 'Enseignant',  icon: <FaChalkboardTeacher /> },
+        { value: 'admin',   label: 'Admin',       icon: <FaShieldAlt /> },
     ];
 
     return (
         <div style={pageWrap}>
             <style>{`
                 * { box-sizing: border-box; }
-                .auth-input { transition: border-color 0.2s; }
                 .auth-input:focus { border-color: #6d28d9 !important; outline: none; background: white !important; }
-                .auth-tab-btn { transition: all 0.25s; }
                 .role-card { transition: all 0.2s; }
                 .role-card:hover { border-color: #6d28d9 !important; transform: translateY(-2px); }
+                .auth-submit-btn { transition: all 0.2s; }
                 .auth-submit-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(109,40,217,0.45) !important; }
                 .auth-submit-btn:disabled { opacity: 0.7; cursor: not-allowed; }
-                .eye-btn:hover { color: #6d28d9 !important; }
-                @keyframes fadeSlideUp {
-                    from { opacity: 0; transform: translateY(14px); }
-                    to   { opacity: 1; transform: translateY(0); }
-                }
+                @keyframes fadeSlideUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
                 .form-anim { animation: fadeSlideUp 0.3s ease forwards; }
                 @keyframes spin { to { transform: rotate(360deg); } }
                 .spin-icon { animation: spin 0.9s linear infinite; }
+                @keyframes successPop { 0%{transform:scale(0.8);opacity:0} 60%{transform:scale(1.05)} 100%{transform:scale(1);opacity:1} }
+                .success-banner { animation: successPop 0.4s ease forwards; }
                 @media (max-width: 768px) {
                     .auth-slideshow { display: none !important; }
                     .auth-form-panel { width: 100% !important; min-width: unset !important; }
                 }
             `}</style>
 
-            {/* GAUCHE : SLIDESHOW */}
             <div className="auth-slideshow" style={{ flex: 1, minHeight: '100vh' }}>
                 <SlideshowPanel />
             </div>
 
-            {/* DROITE : FORMULAIRE */}
             <div className="auth-form-panel" style={formPanel}>
                 <div style={formInner}>
 
-                    {/* TITRE */}
                     <div style={{ marginBottom: '28px' }}>
-                        <h2 style={formTitle}>
-                            {mode === 'login' ? 'Bon retour 👋' : 'Créer un compte'}
-                        </h2>
+                        <h2 style={formTitle}>{mode === 'login' ? 'Bon retour 👋' : 'Créer un compte'}</h2>
                         <p style={formSub}>
-                            {mode === 'login'
-                                ? 'Connectez-vous pour accéder à votre espace.'
-                                : 'Rejoignez la plateforme en quelques secondes.'}
+                            {mode === 'login' ? 'Connectez-vous pour accéder à votre espace.' : 'Rejoignez la plateforme en quelques secondes.'}
                         </p>
                     </div>
 
                     {/* ONGLETS */}
                     <div style={tabBar}>
-                        <button className="auth-tab-btn" onClick={() => { setMode('login'); setError(''); }} style={mode === 'login' ? tabActive : tabInactive}>
+                        <button onClick={() => { setMode('login'); setError(''); setSuccessMsg(''); }} style={mode === 'login' ? tabActive : tabInactive}>
                             Connexion
                         </button>
-                        <button className="auth-tab-btn" onClick={() => { setMode('register'); setError(''); }} style={mode === 'register' ? tabActive : tabInactive}>
+                        <button onClick={() => { setMode('register'); setError(''); setSuccessMsg(''); }} style={mode === 'register' ? tabActive : tabInactive}>
                             Inscription
                         </button>
                     </div>
+
+                    {/* BANNIÈRE SUCCÈS */}
+                    {successMsg && (
+                        <div className="success-banner" style={successBox}>
+                            <FaCheckCircle style={{ fontSize: '18px', flexShrink: 0 }} />
+                            <span>{successMsg}</span>
+                        </div>
+                    )}
 
                     {/* CONNEXION */}
                     {mode === 'login' && (
@@ -176,20 +201,17 @@ const AuthPage = ({ onAuthSuccess }) => {
                                     <input className="auth-input" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="votre@email.com" style={inputStyle} required />
                                 </div>
                             </div>
-
                             <div style={fieldWrap}>
                                 <label style={labelStyle}>Mot de passe</label>
                                 <div style={inputWrap}>
                                     <FaLock style={inputIcon} />
                                     <input className="auth-input" type={showPassword ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" style={inputStyle} required />
-                                    <div className="eye-btn" onClick={() => setShowPassword(!showPassword)} style={eyeBtn}>
+                                    <div onClick={() => setShowPassword(!showPassword)} style={eyeBtn}>
                                         {showPassword ? <FaEyeSlash /> : <FaEye />}
                                     </div>
                                 </div>
                             </div>
-
                             {error && <div style={errorBox}>{error}</div>}
-
                             <button type="submit" disabled={loading} className="auth-submit-btn" style={submitBtn}>
                                 {loading ? <FaSpinner className="spin-icon" /> : 'SE CONNECTER'}
                             </button>
@@ -206,7 +228,6 @@ const AuthPage = ({ onAuthSuccess }) => {
                                     <input className="auth-input" type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Prénom Nom" style={inputStyle} required />
                                 </div>
                             </div>
-
                             <div style={fieldWrap}>
                                 <label style={labelStyle}>Email</label>
                                 <div style={inputWrap}>
@@ -214,14 +235,13 @@ const AuthPage = ({ onAuthSuccess }) => {
                                     <input className="auth-input" type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="votre@email.com" style={inputStyle} required />
                                 </div>
                             </div>
-
                             <div style={{ display: 'flex', gap: '12px' }}>
                                 <div style={{ ...fieldWrap, flex: 1 }}>
                                     <label style={labelStyle}>Mot de passe</label>
                                     <div style={inputWrap}>
                                         <FaLock style={inputIcon} />
                                         <input className="auth-input" type={showPassword ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)} placeholder="Min. 6 car." style={inputStyle} required />
-                                        <div className="eye-btn" onClick={() => setShowPassword(!showPassword)} style={eyeBtn}>
+                                        <div onClick={() => setShowPassword(!showPassword)} style={eyeBtn}>
                                             {showPassword ? <FaEyeSlash /> : <FaEye />}
                                         </div>
                                     </div>
@@ -231,13 +251,12 @@ const AuthPage = ({ onAuthSuccess }) => {
                                     <div style={inputWrap}>
                                         <FaLock style={inputIcon} />
                                         <input className="auth-input" type={showConfirm ? 'text' : 'password'} value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder="••••••••" style={inputStyle} required />
-                                        <div className="eye-btn" onClick={() => setShowConfirm(!showConfirm)} style={eyeBtn}>
+                                        <div onClick={() => setShowConfirm(!showConfirm)} style={eyeBtn}>
                                             {showConfirm ? <FaEyeSlash /> : <FaEye />}
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                             <div style={fieldWrap}>
                                 <label style={labelStyle}>Je suis...</label>
                                 <div style={{ display: 'flex', gap: '10px' }}>
@@ -253,9 +272,7 @@ const AuthPage = ({ onAuthSuccess }) => {
                                     ))}
                                 </div>
                             </div>
-
                             {error && <div style={errorBox}>{error}</div>}
-
                             <button type="submit" disabled={loading} className="auth-submit-btn" style={submitBtn}>
                                 {loading ? <FaSpinner className="spin-icon" /> : 'CRÉER MON COMPTE'}
                             </button>
@@ -264,7 +281,7 @@ const AuthPage = ({ onAuthSuccess }) => {
 
                     <p style={{ textAlign: 'center', marginTop: '20px', fontSize: '13px', color: '#94a3b8' }}>
                         {mode === 'login' ? "Pas encore de compte ? " : "Déjà inscrit ? "}
-                        <span onClick={() => { setMode(mode === 'login' ? 'register' : 'login'); setError(''); }}
+                        <span onClick={() => { setMode(mode === 'login' ? 'register' : 'login'); setError(''); setSuccessMsg(''); }}
                             style={{ color: '#6d28d9', fontWeight: 'bold', cursor: 'pointer' }}>
                             {mode === 'login' ? "S'inscrire" : "Se connecter"}
                         </span>
@@ -275,33 +292,28 @@ const AuthPage = ({ onAuthSuccess }) => {
     );
 };
 
-// ===================== STYLES =====================
 const pageWrap = { display: 'flex', minHeight: '100vh', fontFamily: "'Montserrat', sans-serif", backgroundColor: '#f8fafc' };
-
 const slideshowWrap = { position: 'relative', width: '100%', height: '100vh', overflow: 'hidden' };
 const slideStyle = { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundSize: 'cover', backgroundPosition: 'center', transition: 'opacity 1.5s ease-in-out' };
 const slideshowOverlay = { position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(30,27,75,0.78) 0%, rgba(109,40,217,0.58) 100%)' };
 const slideshowContent = { position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '60px', color: 'white' };
 const slideshowTitle = { fontSize: '42px', fontWeight: '900', lineHeight: 1.2, margin: '0 0 16px 0', textShadow: '0 2px 12px rgba(0,0,0,0.3)' };
 const slideshowSub = { fontSize: '16px', opacity: 0.85, maxWidth: '360px', lineHeight: 1.6, margin: 0 };
-
 const formPanel = { width: '480px', minWidth: '480px', height: '100vh', overflowY: 'auto', backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '-10px 0 40px rgba(0,0,0,0.08)' };
 const formInner = { width: '100%', maxWidth: '380px', padding: '40px 20px' };
 const formTitle = { fontSize: '26px', fontWeight: '800', color: '#1e1b4b', margin: '0 0 6px 0' };
 const formSub = { fontSize: '14px', color: '#64748b', margin: 0 };
-
 const tabBar = { display: 'flex', backgroundColor: '#f1f5f9', borderRadius: '12px', padding: '4px', gap: '4px' };
 const tabActive = { flex: 1, padding: '11px', borderRadius: '10px', border: 'none', backgroundColor: '#6d28d9', color: 'white', fontWeight: '700', cursor: 'pointer', fontSize: '14px' };
 const tabInactive = { flex: 1, padding: '11px', borderRadius: '10px', border: 'none', backgroundColor: 'transparent', color: '#64748b', fontWeight: '500', cursor: 'pointer', fontSize: '14px' };
-
 const fieldWrap = { marginBottom: '16px' };
 const labelStyle = { display: 'block', fontSize: '11px', fontWeight: '700', color: '#374151', marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.5px' };
 const inputWrap = { position: 'relative' };
 const inputIcon = { position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#cbd5e1', fontSize: '13px', pointerEvents: 'none' };
-const eyeBtn = { position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', cursor: 'pointer', fontSize: '14px', transition: 'color 0.2s' };
-const inputStyle = { width: '100%', padding: '13px 40px 13px 40px', borderRadius: '12px', border: '1.5px solid #e2e8f0', fontSize: '14px', backgroundColor: '#fafafa' };
-
-const submitBtn = { width: '100%', padding: '15px', backgroundColor: '#6d28d9', color: 'white', border: 'none', borderRadius: '12px', fontWeight: '800', fontSize: '14px', cursor: 'pointer', marginTop: '8px', boxShadow: '0 8px 20px rgba(109,40,217,0.3)', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', transition: 'all 0.2s' };
+const eyeBtn = { position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8', cursor: 'pointer', fontSize: '14px' };
+const inputStyle = { width: '100%', padding: '13px 40px 13px 40px', borderRadius: '12px', border: '1.5px solid #e2e8f0', fontSize: '14px', backgroundColor: '#fafafa', transition: 'border-color 0.2s' };
+const submitBtn = { width: '100%', padding: '15px', backgroundColor: '#6d28d9', color: 'white', border: 'none', borderRadius: '12px', fontWeight: '800', fontSize: '14px', cursor: 'pointer', marginTop: '8px', boxShadow: '0 8px 20px rgba(109,40,217,0.3)', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' };
 const errorBox = { backgroundColor: '#fef2f2', color: '#dc2626', border: '1px solid #fecaca', borderRadius: '10px', padding: '10px 14px', fontSize: '13px', fontWeight: '600', marginBottom: '12px' };
+const successBox = { backgroundColor: '#f0fdf4', color: '#16a34a', border: '1px solid #bbf7d0', borderRadius: '10px', padding: '12px 16px', fontSize: '14px', fontWeight: '600', marginTop: '16px', display: 'flex', alignItems: 'center', gap: '10px' };
 
 export default AuthPage;
