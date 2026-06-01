@@ -4,150 +4,122 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
-
 
 class AdminController extends Controller
 {
-  public function getGlobalStats()
-{
-    try {
-        $sessions = DB::table('fl_sessions')->get();
-
-        $all = $sessions->map(function($s) {
-            $firstname = 'Utilisateur';
-            $lastname = 'Moodle';
-
-            // On entoure la recherche Moodle d'un try/catch interne
-            try {
-                $user = DB::connection('moodle_conn')
-                    ->table('mdl_user') // <--- Si votre table s'appelle autrement, changez ici
-                    ->where('id', $s->moodle_user_id)
-                    ->first();
-
-                if ($user) {
-                    $firstname = $user->firstname;
-                    $lastname = $user->lastname;
-                }
-            } catch (\Exception $e) {
-                // Si la table mdl_user n'existe pas, on arrive ici.
-                // On laisse "Utilisateur Moodle" pour ne pas faire planter l'admin.
-                $firstname = "Lien Moodle";
-                $lastname = "Cassé";
-            }
-
-            return [
-                'id' => $s->id,
-                'title' => $s->title,
-                'pin_code' => $s->pin_code,
-                'status' => $s->status,
-                'scheduled_at' => $s->scheduled_at,
-                'created_at' => $s->created_at,
-                'firstname' => $firstname,
-                'lastname' => $lastname,
-                'message_count' => DB::table('fl_messages')->where('session_id', $s->id)->count(),
-                'participant_count' => DB::table('fl_participants')->where('session_id', $s->id)->count(),
-            ];
-        });
-
-        // Pour les Top Teachers, on fait pareil
-        $topTeachers = [];
+    // ─── GET /admin/stats ────────────────────────────────────────────────────
+    // Tout depuis fl_sessions + users (Laravel DB uniquement, ZERO Moodle)
+    public function getGlobalStats()
+    {
         try {
-            $topTeacherData = DB::table('fl_messages')
+            $sessions = DB::table('fl_sessions')
+                ->leftJoin('users', 'users.id', '=', 'fl_sessions.moodle_user_id')
+                ->select(
+                    'fl_sessions.*',
+                    // On expose name comme firstname pour ne pas casser AdminHistory
+                    'users.name as firstname',
+                    DB::raw("'' as lastname"),
+                    'users.email as teacher_email'
+                )
+                ->orderBy('fl_sessions.created_at', 'desc')
+                ->get()
+                ->map(function ($s) {
+                    $s->message_count     = DB::table('fl_messages')->where('session_id', $s->id)->count();
+                    $s->participant_count = DB::table('fl_participants')->where('session_id', $s->id)->count();
+                    return $s;
+                });
+
+            // Top enseignants par nombre de messages reçus
+            $topTeachers = DB::table('fl_messages')
                 ->join('fl_sessions', 'fl_messages.session_id', '=', 'fl_sessions.id')
-                ->select('fl_sessions.moodle_user_id', DB::raw('count(fl_messages.id) as total'))
-                ->groupBy('fl_sessions.moodle_user_id')
-                ->orderBy('total', 'desc')->take(3)->get();
+                ->join('users', 'users.id', '=', 'fl_sessions.moodle_user_id')
+                ->select('users.id', 'users.name', DB::raw('count(fl_messages.id) as total'))
+                ->groupBy('users.id', 'users.name')
+                ->orderBy('total', 'desc')
+                ->take(3)
+                ->get()
+                ->map(fn($t) => [
+                    'firstname' => $t->name,
+                    'lastname'  => '',
+                    'total'     => $t->total,
+                ]);
 
-            foreach($topTeacherData as $t) {
-                $u = null;
-                try {
-                    $u = DB::connection('moodle_conn')->table('mdl_user')->where('id', $t->moodle_user_id)->first();
-                } catch(\Exception $e) {}
-
-                $topTeachers[] = [
-                    'firstname' => $u ? $u->firstname : 'Prof',
-                    'lastname' => $u ? $u->lastname : $t->moodle_user_id,
-                    'total' => $t->total
-                ];
-            }
-        } catch (\Exception $e) {}
-
-        return response()->json([
-            'live' => $all->where('status', 'active')->values(),
-            'planned' => $all->where('status', 'planned')->values(),
-            'history' => $all->where('status', 'closed')->values(),
-            'topTeachers' => $topTeachers,
-            'chartData' => $this->getChartData(),
-            'totals' => [
-                'active' => $all->where('status', 'active')->count(),
-                'total_msgs' => DB::table('fl_messages')->count(),
-            ]
-        ]);
-
-    } catch (\Exception $e) {
-        return response()->json(['error' => true, 'message' => $e->getMessage()], 500);
-    }
-}
-
-
-    public function getMoodleUsers() {
-    try {
-        return response()->json(
-            DB::connection('moodle_conn') // On va sur Moodle
-            ->table('mdl_user')
-            ->leftJoin('futurelearn_db.fl_user_roles', 'mdl_user.id', '=', 'fl_user_roles.moodle_user_id')
-            ->select('mdl_user.id', 'mdl_user.firstname', 'mdl_user.lastname', 'mdl_user.email', 
-                     DB::raw('COALESCE(fl_user_roles.role, "student") as role'))
-            ->get()
-        );
-    } catch (\Exception $e) {
-        // Fallback si la jointure échoue
-        $users = DB::connection('moodle_conn')->table('mdl_user')->select('id','firstname','lastname','email')->get();
-        return response()->json($users->map(function($u) {
-            $u->role = 'student';
-            return $u;
-        }));
-    }
-}
-
-    private function getChartData() {
-    $chartData = [];
-    for ($i = 6; $i >= 0; $i--) {
-        $d = \Carbon\Carbon::now()->subDays($i);
-        $count = DB::table('fl_messages')->whereDate('created_at', $d->toDateString())->count();
-        $chartData[] = ['name' => $d->format('d/m'), 'messages' => $count];
-    }
-    return $chartData;
-}
-
-
-    public function updateUserRole(Request $request, $id) {
-        try {
-            DB::table('fl_user_roles')->updateOrInsert(
-                ['moodle_user_id' => $id],
-                ['role' => $request->role, 'updated_at' => now()]
-            );
-            return response()->json(['message' => 'OK']);
+            return response()->json([
+                'live'        => $sessions->where('status', 'active')->values(),
+                'planned'     => $sessions->where('status', 'planned')->values(),
+                'history'     => $sessions->where('status', 'closed')->values(),
+                'topTeachers' => $topTeachers,
+                'chartData'   => $this->getChartData(),
+                'totals'      => [
+                    'active'     => $sessions->where('status', 'active')->count(),
+                    'total_msgs' => DB::table('fl_messages')->count(),
+                ],
+            ]);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json(['error' => true, 'message' => $e->getMessage()], 500);
         }
     }
 
-    public function exportSessionCsv($id) {
+    // ─── GET /admin/users ────────────────────────────────────────────────────
+    // Liste tous les users de la table users (Laravel), rôle inclus
+    public function getUsers()
+    {
+        $users = DB::table('users')
+            ->select('id', 'name', 'email', 'role', 'created_at')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json($users);
+    }
+
+    // ─── PUT /admin/users/{id}/role ───────────────────────────────────────────
+    // Met à jour le rôle directement dans la table users
+    public function updateUserRole(Request $request, $id)
+    {
+        $request->validate([
+            'role' => 'required|in:student,teacher,admin',
+        ]);
+
+        $updated = DB::table('users')
+            ->where('id', $id)
+            ->update(['role' => $request->role, 'updated_at' => now()]);
+
+        if (!$updated) {
+            return response()->json(['error' => 'Utilisateur introuvable'], 404);
+        }
+
+        $user = DB::table('users')->where('id', $id)->first();
+        return response()->json(['message' => 'Rôle mis à jour', 'user' => $user]);
+    }
+
+    // ─── GET /admin/sessions/{id}/export ─────────────────────────────────────
+    public function exportSessionCsv($id)
+    {
         $session = DB::table('fl_sessions')->where('id', $id)->first();
         if (!$session) return response()->json(['error' => 'Not found'], 404);
 
         $messages = DB::table('fl_messages')->where('session_id', $id)->get();
-        
+
         $csv = "DATE;MESSAGE\n";
         foreach ($messages as $m) {
             $csv .= "{$m->created_at};{$m->content}\n";
         }
 
         return response()->json([
-            'content' => $csv,
-            'filename' => "Session_{$session->pin_code}.csv"
+            'content'  => $csv,
+            'filename' => "Session_{$session->pin_code}.csv",
         ]);
+    }
+
+    // ─── PRIVÉ : données du graphique (7 derniers jours) ─────────────────────
+    private function getChartData()
+    {
+        $chartData = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $d       = \Carbon\Carbon::now()->subDays($i);
+            $count   = DB::table('fl_messages')->whereDate('created_at', $d->toDateString())->count();
+            $chartData[] = ['name' => $d->format('d/m'), 'messages' => $count];
+        }
+        return $chartData;
     }
 }

@@ -35,11 +35,21 @@ Route::get('/help', [SessionController::class, 'getHelp']);
 // Endpoint de conseils (max 3) pour le prof lors d'une activité
 Route::get('/sessions/{id}/advice', [SessionController::class, 'getAdvice']);
 Route::prefix('admin')->group(function () {
-    Route::get('/sessions', [AdminController::class, 'getGlobalStats']);
-    Route::get('/users', [AdminController::class, 'getMoodleUsers']);
+
+    // Tableau de bord — stats globales (sessions, graphique, top enseignants)
+    Route::get('/stats', [AdminController::class, 'getGlobalStats']);
+
+    // Liste des utilisateurs depuis la table users (PLUS Moodle)
+    Route::get('/users', [AdminController::class, 'getUsers']);
+
+    // Changer le rôle d'un utilisateur (écrit dans users.role)
     Route::put('/users/{id}/role', [AdminController::class, 'updateUserRole']);
-    Route::get('/sessions/{id}/export-csv', [AdminController::class, 'exportSessionCsv']);
+
+    // Export CSV d'une session
+    Route::get('/sessions/{id}/export', [AdminController::class, 'exportSessionCsv']);
+
 });
+
 
 // --- ACTIVITÉS & SONDAGES ---
 Route::post('/sessions/{id}/start', [SessionController::class, 'startSession']);
