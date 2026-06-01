@@ -81,11 +81,7 @@ function AppContent() {
                     <Route path="/" element={<AuthPage onAuthSuccess={handleAuthSuccess} />} />
 
                     {/* ÉTUDIANT */}
-                          <Route path="/join/:pin" element={
-                          user?.role === 'student'
-                              ? <StudentJoin onLogout={handleLogout} />
-                              : <AuthPage onAuthSuccess={handleAuthSuccess} redirectPin={true} />
-                      } />
+                    <Route path="/join/:pin" element={<StudentJoin onLogout={handleLogout} skipAuth={true} />} />
                     <Route path="/student" element={
                         user?.role === 'student'
                             ? <StudentJoin onLogout={handleLogout} />
