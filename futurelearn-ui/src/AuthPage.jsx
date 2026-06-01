@@ -36,7 +36,7 @@ const SlideshowPanel = ({ overlay }) => {
 
             <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '60px', color: hasOverlay ? 'white' : '#1e1b4b' }}>
                 {/* Logo bien agrandi */}
-                <img src="/logo.png" alt="Logo" style={{ width: '260px', marginBottom: '36px', maxWidth: '70%', filter: hasOverlay ? 'brightness(0) invert(1)' : 'none' }} />
+                <img src="/logo.png" alt="Logo" style={{ width: '400px', marginBottom: '45px', maxWidth: '90%', filter: hasOverlay ? 'brightness(0) invert(1)' : 'none' }} />
                 <h1 style={{ fontSize: '42px', fontWeight: '900', lineHeight: 1.2, margin: '0 0 16px 0' }}>
                     Apprenez.<br />Interagissez.<br />Progressez.
                 </h1>

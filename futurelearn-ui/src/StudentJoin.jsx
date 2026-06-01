@@ -4,9 +4,13 @@ import StudentSession from './StudentSession';
 import api from './api';
 import { FaSpinner, FaKeyboard, FaCheckCircle, FaHistory, FaTimes } from 'react-icons/fa';
 import StudentSummary from './components/StudentSummary';
+import { useParams } from 'react-router-dom';
 
 const StudentJoin = ({ onLogout }) => {
-    const [pin, setPin] = useState('');
+        const { pin: urlPin } = useParams();
+    useEffect(() => {
+        if (urlPin) setPin(urlPin);
+    }, [urlPin]);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [showToast, setShowToast] = useState(false);
