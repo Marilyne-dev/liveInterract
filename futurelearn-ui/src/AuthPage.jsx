@@ -7,7 +7,7 @@ import {
 } from 'react-icons/fa';
 
 // ─── CONSTANTES ADMIN (identifiants fixes) ───────────────────────────────────
-const ADMIN_EMAIL    = 'marilyneaniambossou@gmail.com';
+const ADMIN_EMAIL    = 'admin@gmail.com';
 const ADMIN_PASSWORD = 'admin123';
 
 // ─── SLIDESHOW (inchangé) ────────────────────────────────────────────────────
