@@ -132,7 +132,7 @@ const AIChatBot = () => {
                     {/* Header */}
                     <div style={{ backgroundColor: '#6d28d9', color: 'white', padding: '14px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                            <FaRobot /> <b style={{ fontSize: '14px' }}>Copilote Future Learn</b>
+                            <FaRobot /> <b style={{ fontSize: '14px' }}>Copilote LiveInteract</b>
                         </div>
                         <FaTimes onClick={() => setIsOpen(false)} style={{ cursor: 'pointer', fontSize: '18px' }} />
                     </div>
