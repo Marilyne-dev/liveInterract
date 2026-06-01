@@ -19,9 +19,25 @@ const StudentJoin = ({ onLogout, skipAuth }) => {
     const [summaryPin, setSummaryPin] = useState(null);
 
     // Si on arrive via QR code, on pré-remplit le PIN
-    useEffect(() => {
-        if (urlPin) setPin(urlPin);
-    }, [urlPin]);
+   useEffect(() => {
+    if (urlPin) {
+        setPin(urlPin);
+        // Si le prénom est déjà connu, rejoindre automatiquement
+        const savedId = localStorage.getItem('my_student_id');
+        const authUser = JSON.parse(localStorage.getItem('auth_user') || '{}');
+        if (savedId || authUser.id) {
+            // Rejoindre directement !
+            const id = savedId || ('STU-' + authUser.id);
+            api.post('/sessions/join', { pin_code: urlPin, student_id: id })
+                .then(res => {
+                    localStorage.setItem('active_student_session', JSON.stringify(res.data.session));
+                    setActiveSession(res.data.session);
+                })
+                .catch(err => setError(err.response?.data?.error || 'Session introuvable'));
+        }
+    }
+}, [urlPin]);
+
 
     // Récupère les infos de l'étudiant connecté
     const authUser = JSON.parse(localStorage.getItem('auth_user') || '{}');
