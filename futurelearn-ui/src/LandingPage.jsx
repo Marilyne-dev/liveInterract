@@ -90,17 +90,15 @@ export default function LandingPage() {
       <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700;900&display=swap" rel="stylesheet"/>
 
       <style>{`
-        /* ══ NOUVELLES VARIABLES COULEURS (thème sombre violet) ══ */
         :root {
           --primary:      #7b52c8;
           --primary-dark: #5c3d9e;
           --primary-lt:   #a87de8;
           --light-bg:     #afa8c6;
           --dark2:        #525154;
-          --card-bg:      #1f1535;
+          --card-bg:      #747277;
           --text-dark:    #e8e0f8;
           --text-light:   #9b89c4;
-          --card-bg:      #747277;
           --shadow:       0 5px 20px rgba(0,0,0,0.4);
           --radius:       15px;
           --accent:       #a87de8;
@@ -135,19 +133,19 @@ export default function LandingPage() {
         .li-nav-logo { height: 55px; width: auto; }
         .li-nav-links { display: flex; align-items: center; }
         .li-nav-links li { margin-left: 30px; }
-        .li-nav-links a { color: var(--text-light); font-weight: 500; font-size: 1rem; padding: 5px 0; position: relative; transition: color .25s; }
-        .li-nav-links a:hover { color: var(--text-dark); text-decoration: none; }
-        .li-nav-links a::after { content:''; position:absolute; left:0; bottom:-5px; width:0; height:2px; background:var(--primary-lt); transition:width .3s; }
+        .li-nav-links a { color: #ffffff; font-weight: 500; font-size: 1rem; padding: 5px 0; position: relative; transition: color .25s; }
+        .li-nav-links a:hover { color: #ffffff; text-decoration: none; }
+        .li-nav-links a::after { content:''; position:absolute; left:0; bottom:-5px; width:0; height:2px; background:#ffffff; transition:width .3s; }
         .li-nav-links a:hover::after { width: 100%; }
         .li-nav-btn {
-          border: 2px solid var(--primary-lt) !important;
+          border: 2px solid #ffffff !important;
           padding: 5px 15px; border-radius: 50px;
-          font-weight: bold; color: var(--primary-lt) !important;
+          font-weight: bold; color: #ffffff !important;
           background: rgba(156, 145, 173, 0.1);
           transition: all .25s;
         }
         .li-nav-btn:hover { background: var(--primary); color: white !important; text-decoration: none; }
-        .li-menu-toggle { display: none; background: none; border: none; font-size: 1.8rem; color: var(--primary-lt); cursor: pointer; }
+        .li-menu-toggle { display: none; background: none; border: none; font-size: 1.8rem; color: #ffffff; cursor: pointer; }
 
         /* ── Hero ── */
         .li-hero {
@@ -172,8 +170,8 @@ export default function LandingPage() {
           object-fit: cover; filter: blur(5px) brightness(0.35); z-index: -1;
         }
         .li-hero-content { position: relative; z-index: 1; max-width: 900px; }
-        .li-hero-content h1 { font-size: 4.5rem; font-weight: 900; text-shadow: 2px 2px 10px rgba(0,0,0,0.8); margin-bottom: 20px; }
-        .li-hero-content p { font-size: 1.8rem; font-weight: 300; color: rgba(232,224,248,0.85); text-shadow: 1px 1px 5px rgba(0,0,0,0.7); margin-bottom: 40px; }
+        .li-hero-content h1 { font-size: 4.5rem; font-weight: 900; text-shadow: 2px 2px 10px rgba(0,0,0,0.8); margin-bottom: 20px; color: #ffffff; }
+        .li-hero-content p { font-size: 1.8rem; font-weight: 300; color: #ffffff; text-shadow: 1px 1px 5px rgba(0,0,0,0.7); margin-bottom: 40px; }
         .li-hero-btns { margin-top: 40px; display: flex; gap: 25px; justify-content: center; flex-wrap: wrap; }
 
         .li-btn-hero {
@@ -197,11 +195,15 @@ export default function LandingPage() {
         .li-section > .li-inner { max-width: 1200px; margin: 0 auto; }
         .li-light { background: var(--dark2); }
         .li-dark  { background: var(--primary-dark); }
-        .li-sec-header { margin-bottom: 60px; }
-        .li-sec-header h2 { font-size: 3.5rem; font-weight: bold; margin-bottom: 20px; color: var(--text-dark); }
-        .li-sec-header p { font-size: 1.3rem; color: var(--text-light); max-width: 800px; margin: 0 auto; }
 
-        /* ── Cards fonctionnalités ── */
+        /* ── Titres de sections ── */
+        .li-sec-header { margin-bottom: 60px; }
+        .li-sec-header h2 { font-size: 3.5rem; font-weight: bold; margin-bottom: 20px; color: #ffffff; }
+        .li-sec-header p  { font-size: 1.3rem; color: #ffffff; max-width: 800px; margin: 0 auto; }
+
+        /* ══════════════════════════════════════════════
+           FONCTIONNALITÉS CLÉS — textes blancs
+        ══════════════════════════════════════════════ */
         .li-course-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); gap: 30px; text-align: left; }
         .li-course-card {
           background: var(--card-bg);
@@ -210,10 +212,18 @@ export default function LandingPage() {
           transition: transform .3s, box-shadow .3s, border-color .3s;
         }
         .li-course-card:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(0,0,0,0.5); border-color: rgba(165,120,232,0.5); }
-        .li-course-card h3 { font-size: 1.8rem; font-weight: bold; color: var(--primary-lt); margin-bottom: 25px; }
+
+        /* ← TITRE de la carte : blanc */
+        .li-course-card h3 { font-size: 1.8rem; font-weight: bold; color: #ffffff; margin-bottom: 25px; }
+
+        /* ← ITEMS de liste : blanc */
         .li-course-card ul { margin-bottom: 30px; }
-        .li-course-card ul li { font-size: 1.1rem; color: var(--text-light); margin-bottom: 12px; position: relative; padding-left: 30px; }
-        .li-course-card ul li i { color: #a87de8; position: absolute; left: 0; top: 3px; font-size: 1.1em; }
+        .li-course-card ul li {
+          font-size: 1.1rem;
+          color: #ffffff;          /* ← blanc */
+          margin-bottom: 12px; position: relative; padding-left: 30px;
+        }
+        .li-course-card ul li i { color: #ffffff; position: absolute; left: 0; top: 3px; font-size: 1.1em; }
         .li-course-card .li-btn-primary { width: 100%; padding: 10px 15px; border-radius: 8px; }
 
         /* ── Boutons généraux ── */
@@ -228,8 +238,8 @@ export default function LandingPage() {
         .li-btn-secondary {
           display: inline-block; padding: 12px 25px; border-radius: 50px;
           font-weight: bold; font-size: 1rem;
-          background: transparent; border: 2px solid var(--primary-lt);
-          color: var(--primary-lt); cursor: pointer; transition: all .3s;
+          background: transparent; border: 2px solid #ffffff;
+          color: #ffffff; cursor: pointer; transition: all .3s;
         }
         .li-btn-secondary:hover { background: var(--primary); color: white; text-decoration: none; border-color: var(--primary); }
 
@@ -245,12 +255,16 @@ export default function LandingPage() {
         }
         .li-tile-card:hover { transform: translateY(-8px); box-shadow: 0 20px 50px rgba(92,61,158,0.4); }
         .li-tile-card img { width: 80px; height: 80px; margin-bottom: 25px; filter: invert(1) brightness(1.2); }
-        .li-tile-card h3 { font-size: 2rem; font-weight: bold; color: white; margin-bottom: 20px; text-align: center; }
-        .li-tile-card p { font-size: 1.1rem; color: rgba(232,224,248,0.8); margin-bottom: 30px; text-align: center; }
-        .li-tile-card .li-btn-secondary { border-color: rgba(165,120,232,0.6); color: var(--primary-lt); border-radius: 8px; padding: 10px 20px; }
-        .li-tile-card .li-btn-secondary:hover { background: rgba(165,120,232,0.2); color: white; border-color: var(--primary-lt); }
 
-        /* ── Comment ça marche ── */
+        /* ← Titre et texte des tuiles : blanc */
+        .li-tile-card h3 { font-size: 2rem; font-weight: bold; color: #ffffff; margin-bottom: 20px; text-align: center; }
+        .li-tile-card p  { font-size: 1.1rem; color: #ffffff; margin-bottom: 30px; text-align: center; }
+        .li-tile-card .li-btn-secondary { border-color: #ffffff; color: #ffffff; border-radius: 8px; padding: 10px 20px; }
+        .li-tile-card .li-btn-secondary:hover { background: rgba(255,255,255,0.15); color: white; border-color: #ffffff; }
+
+        /* ══════════════════════════════════════════════
+           COMMENT ÇA FONCTIONNE — textes blancs
+        ══════════════════════════════════════════════ */
         .li-process-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(300px,1fr)); gap: 30px; margin-top: 40px; }
         .li-process-step {
           background: var(--card-bg);
@@ -266,13 +280,15 @@ export default function LandingPage() {
           margin: 0 auto 25px; color: white; font-size: 2.5rem;
           box-shadow: 0 8px 24px rgba(92,61,158,0.5);
         }
-        .li-process-step h3 { font-size: 1.8rem; font-weight: bold; color: var(--primary-lt); margin-bottom: 15px; }
-        .li-process-step p { color: var(--text-light); font-size: 1.1rem; }
+
+        /* ← Titre et paragraphe des étapes : blanc */
+        .li-process-step h3 { font-size: 1.8rem; font-weight: bold; color: #ffffff; margin-bottom: 15px; }
+        .li-process-step p  { color: #ffffff; font-size: 1.1rem; }
 
         /* ── Compteur ── */
         .li-counter-wrap { margin-bottom: 60px; color: white; }
-        .li-counter-text { font-size: 1.5rem; font-weight: 300; margin-bottom: 10px; color: rgba(232,224,248,0.85); }
-        .li-counter-num { font-size: 5rem; font-weight: 900; color: var(--primary-lt); text-shadow: 0 0 30px rgba(168,125,232,0.6); display: inline-block; }
+        .li-counter-text { font-size: 1.5rem; font-weight: 300; margin-bottom: 10px; color: #ffffff; }
+        .li-counter-num { font-size: 5rem; font-weight: 900; color: #ffffff; text-shadow: 0 0 30px rgba(168,125,232,0.6); display: inline-block; }
 
         /* ── Témoignages ── */
         .li-testimonial-wrap { position: relative; max-width: 800px; margin: 0 auto; }
@@ -284,10 +300,10 @@ export default function LandingPage() {
           border: 1px solid rgba(165,120,232,0.2);
           border-radius: var(--radius); color: white; text-align: center;
         }
-        .li-testimonial-card img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 20px; border: 3px solid var(--primary-lt); }
-        .li-testimonial-card h3 { font-size: 1.8rem; font-weight: bold; margin-bottom: 5px; }
-        .li-testimonial-card .li-role { font-size: 1.1rem; color: var(--text-light); margin-bottom: 25px; }
-        .li-testimonial-card blockquote { font-size: 1.3rem; line-height: 1.8; color: rgba(232,224,248,0.9); font-style: italic; padding: 0 20px; }
+        .li-testimonial-card img { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; margin-bottom: 20px; border: 3px solid #ffffff; }
+        .li-testimonial-card h3 { font-size: 1.8rem; font-weight: bold; margin-bottom: 5px; color: #ffffff; }
+        .li-testimonial-card .li-role { font-size: 1.1rem; color: #ffffff; margin-bottom: 25px; }
+        .li-testimonial-card blockquote { font-size: 1.3rem; line-height: 1.8; color: #ffffff; font-style: italic; padding: 0 20px; }
         .li-carousel-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(165,120,232,0.2); border: 1px solid rgba(165,120,232,0.3); color: white; font-size: 1.5rem; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .3s; z-index: 10; }
         .li-carousel-nav:hover { background: rgba(165,120,232,0.4); }
         .li-carousel-prev { left: -60px; }
@@ -295,8 +311,9 @@ export default function LandingPage() {
 
         /* ── Contact ── */
         .li-contact-content { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; text-align: left; margin-top: 40px; align-items: flex-start; }
-        .li-contact-info p { font-size: 1.2rem; margin-bottom: 20px; color: var(--text-dark); display: flex; align-items: center; }
-        .li-contact-info p i { color: var(--primary-lt); margin-right: 15px; font-size: 1.5rem; }
+        .li-contact-info p { font-size: 1.2rem; margin-bottom: 20px; color: #ffffff; display: flex; align-items: center; }
+        .li-contact-info p i { color: #ffffff; margin-right: 15px; font-size: 1.5rem; }
+        .li-contact-info a { color: #ffffff; }
         .li-contact-form {
           display: flex; flex-direction: column; gap: 20px;
           background: var(--card-bg);
@@ -306,22 +323,22 @@ export default function LandingPage() {
         .li-contact-form input, .li-contact-form textarea {
           padding: 15px; border: 1.5px solid rgba(165,120,232,0.25); border-radius: 8px;
           font-size: 1rem; font-family: 'Montserrat',sans-serif; resize: vertical;
-          background: rgba(255,255,255,0.05); color: var(--text-dark);
+          background: rgba(255,255,255,0.08); color: #ffffff;
           transition: border-color .25s;
         }
-        .li-contact-form input:focus, .li-contact-form textarea:focus { border-color: var(--primary-lt); outline: none; box-shadow: 0 0 0 3px rgba(168,125,232,0.15); }
-        .li-contact-form input::placeholder, .li-contact-form textarea::placeholder { color: var(--text-light); }
+        .li-contact-form input:focus, .li-contact-form textarea:focus { border-color: #ffffff; outline: none; box-shadow: 0 0 0 3px rgba(255,255,255,0.15); }
+        .li-contact-form input::placeholder, .li-contact-form textarea::placeholder { color: rgba(255,255,255,0.6); }
         .li-contact-form .li-btn-primary { padding: 15px 25px; font-size: 1.1rem; border-radius: 8px; }
 
         /* ── Footer ── */
         .li-footer {
           background: #0a0614;
           border-top: 1px solid rgba(165,120,232,0.15);
-          color: var(--text-light); padding: 40px 20px; text-align: center; font-size: 0.9rem;
+          color: #ffffff; padding: 40px 20px; text-align: center; font-size: 0.9rem;
         }
         .li-footer-inner { max-width: 1200px; margin: 0 auto; }
-        .li-footer p { margin-bottom: 15px; }
-        .li-footer-nav a { color: var(--text-light); margin: 0 15px; transition: color .2s; }
+        .li-footer p { margin-bottom: 15px; color: #ffffff; }
+        .li-footer-nav a { color: #ffffff; margin: 0 15px; transition: color .2s; }
         .li-footer-nav a:hover { color: var(--primary-lt); text-decoration: none; }
 
         /* ── Modale ── */
@@ -330,14 +347,13 @@ export default function LandingPage() {
         .li-modal-box {
           background: var(--card-bg); padding: 40px; border-radius: 20px;
           width: 90%; max-width: 600px;
-          border-left: 6px solid var(--primary-lt);
           border: 1px solid rgba(165,120,232,0.3);
-          border-left: 6px solid var(--primary-lt);
+          border-left: 6px solid #ffffff;
           position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.6);
         }
-        .li-modal-close { position: absolute; right: 25px; top: 15px; font-size: 35px; cursor: pointer; color: var(--primary-lt); background: none; border: none; }
-        .li-modal-box h2 { color: var(--primary-lt); margin-bottom: 20px; font-weight: 700; }
-        .li-modal-box p { line-height: 1.6; color: var(--text-light); font-size: 1.1rem; }
+        .li-modal-close { position: absolute; right: 25px; top: 15px; font-size: 35px; cursor: pointer; color: #ffffff; background: none; border: none; }
+        .li-modal-box h2 { color: #ffffff; margin-bottom: 20px; font-weight: 700; }
+        .li-modal-box p  { line-height: 1.6; color: #ffffff; font-size: 1.1rem; }
         @keyframes fadeIn { from{opacity:0} to{opacity:1} }
 
         /* ── Responsive ── */
@@ -393,7 +409,7 @@ export default function LandingPage() {
         {/* ══ HERO ══ */}
         <header id="hero-section" className="li-hero">
           <video autoPlay loop muted playsInline>
-            <source src="video_home.mp4" type="video/mp4" />
+            <source src="video_home.mp4" type="mp4" />
           </video>
           <div className="li-hero-content">
             <h1>LIVEINTERACT</h1>
