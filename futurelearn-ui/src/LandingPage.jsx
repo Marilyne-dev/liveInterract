@@ -15,12 +15,12 @@ const MODAL_DATA = {
 };
 
 const TESTIMONIALS = [
-  { img: "images/user_elizabeth_smith.jpg", name: "Elizabeth AKANHOU",  role: "Directrice Pédagogique, Alpha School",           quote: "LiveInteract a révolutionné l'engagement de nos étudiants. La plateforme est intuitive et les retours en temps réel sont inestimables pour nos enseignants." },
-  { img: "images/user_alex_johnson.jpg",    name: "Alex DOSSOU",         role: "Étudiant en Master, Université de Lyon",          quote: "Grâce à LiveInteract, les cours sont beaucoup plus interactifs. Je peux poser mes questions en direct et obtenir des réponses immédiates. C'est génial !" },
-  { img: "images/user_sophie_martin.jpg",   name: "Sophie AHANDJINOU",   role: "Professeure de Mathématiques, Lycée Condorcet",   quote: "La fonctionnalité de quiz en temps réel est incroyable. Elle me permet de sonder rapidement la compréhension de mes élèves et d'adapter mon enseignement." },
-  { img: "images/user_david_chen.jpg",      name: "David KOUAME",        role: "Développeur Pédagogique, EdTech Solutions",       quote: "J'apprécie la simplicité d'intégration et la robustesse de LiveInteract. C'est un outil puissant pour créer des expériences d'apprentissage immersives." },
-  { img: "images/user_maria_gonzales.jpg",  name: "Maria Gonzales",      role: "Responsable Formation, Entreprise Innovante",     quote: "Nos employés sont plus engagés que jamais grâce aux sondages interactifs. LiveInteract nous aide à mesurer l'efficacité de nos formations en direct." },
-  { img: "images/user_thomas_dupont.jpg",   name: "Thomas KPONDEDJI",    role: "Doctorant en Sciences Sociales, Paris Descartes", quote: "Le système de questions anonymes a libéré la parole dans nos séminaires. Cela encourage la participation de tous, même les plus timides." },
+  { img: "user_elizabeth_smith.jpg", name: "Elizabeth AKANHOU",  role: "Directrice Pédagogique, Alpha School",           quote: "LiveInteract a révolutionné l'engagement de nos étudiants. La plateforme est intuitive et les retours en temps réel sont inestimables pour nos enseignants." },
+  { img: "user_alex_johnson.jpg",    name: "Alex DOSSOU",         role: "Étudiant en Master, Université de Lyon",          quote: "Grâce à LiveInteract, les cours sont beaucoup plus interactifs. Je peux poser mes questions en direct et obtenir des réponses immédiates. C'est génial !" },
+  { img: "user_sophie_martin.jpg",   name: "Sophie AHANDJINOU",   role: "Professeure de Mathématiques, Lycée Condorcet",   quote: "La fonctionnalité de quiz en temps réel est incroyable. Elle me permet de sonder rapidement la compréhension de mes élèves et d'adapter mon enseignement." },
+  { img: "user_david_chen.jpg",      name: "David KOUAME",        role: "Développeur Pédagogique, EdTech Solutions",       quote: "J'apprécie la simplicité d'intégration et la robustesse de LiveInteract. C'est un outil puissant pour créer des expériences d'apprentissage immersives." },
+  { img: "user_maria_gonzales.jpg",  name: "Maria Gonzales",      role: "Responsable Formation, Entreprise Innovante",     quote: "Nos employés sont plus engagés que jamais grâce aux sondages interactifs. LiveInteract nous aide à mesurer l'efficacité de nos formations en direct." },
+  { img: "user_thomas_dupont.jpg",   name: "Thomas KPONDEDJI",    role: "Doctorant en Sciences Sociales, Paris Descartes", quote: "Le système de questions anonymes a libéré la parole dans nos séminaires. Cela encourage la participation de tous, même les plus timides." },
 ];
 
 export default function LandingPage() {
@@ -393,7 +393,7 @@ export default function LandingPage() {
         {/* ══ HERO ══ */}
         <header id="hero-section" className="li-hero">
           <video autoPlay loop muted playsInline>
-            <source src="videos/video_home.mp4" type="video/mp4" />
+            <source src="video_home.mp4" type="video/mp4" />
           </video>
           <div className="li-hero-content">
             <h1>LIVEINTERACT</h1>
@@ -445,11 +445,11 @@ export default function LandingPage() {
             </div>
             <div className="li-tile-grid">
               {[
-                { key:'temps_reel', img:'images/icon_communication.png', title:'Interaction en temps réel',           desc:'Engagez vos étudiants avec des outils dynamiques et interactifs.', btn:'En savoir plus' },
-                { key:'autonome',   img:'images/icon_responsive.png',     title:'Application autonome',                desc:'Fonctionne sans installation complexe, accessible partout.',         btn:'Voir la démo' },
-                { key:'simplicite', img:'images/icon_simplicity.png',     title:"Simplicité d'utilisation",            desc:'Une interface intuitive pour enseignants et étudiants.',             btn:'Nous contacter' },
-                { key:'securite',   img:'images/icon_security.png',       title:'Sécurité des données',                desc:'Vos informations sont protégées avec les meilleures pratiques.',     btn:'En savoir plus' },
-                { key:'universite', img:'images/icon_education.png',      title:"Adaptée à l'enseignement supérieur",  desc:'Conçue pour répondre aux besoins spécifiques des universités.',       btn:'En savoir plus' },
+                { key:'temps_reel', img:'icon_communication.png', title:'Interaction en temps réel',           desc:'Engagez vos étudiants avec des outils dynamiques et interactifs.', btn:'En savoir plus' },
+                { key:'autonome',   img:'icon_responsive.png',     title:'Application autonome',                desc:'Fonctionne sans installation complexe, accessible partout.',         btn:'Voir la démo' },
+                { key:'simplicite', img:'icon_simplicity.png',     title:"Simplicité d'utilisation",            desc:'Une interface intuitive pour enseignants et étudiants.',             btn:'Nous contacter' },
+                { key:'securite',   img:'icon_security.png',       title:'Sécurité des données',                desc:'Vos informations sont protégées avec les meilleures pratiques.',     btn:'En savoir plus' },
+                { key:'universite', img:'icon_education.png',      title:"Adaptée à l'enseignement supérieur",  desc:'Conçue pour répondre aux besoins spécifiques des universités.',       btn:'En savoir plus' },
               ].map(t => (
                 <div className="li-tile-card" key={t.key}>
                   <img src={t.img} alt={t.title} />
