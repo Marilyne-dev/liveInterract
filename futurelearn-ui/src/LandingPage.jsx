@@ -374,7 +374,7 @@ export default function LandingPage() {
         <nav className={`li-navbar${scrolled ? ' scrolled' : ''}`}>
           <div className="li-nav-container">
             <a href="#hero-section" onClick={() => scrollTo('hero-section')}>
-              <img src="images/logo.png" alt="Logo LiveInteract" className="li-nav-logo" />
+              <img src="logo.png" alt="Logo LiveInteract" className="li-nav-logo" />
             </a>
             <button className="li-menu-toggle" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
               <i className={`fas fa-${menuOpen ? 'times' : 'bars'}`}></i>
