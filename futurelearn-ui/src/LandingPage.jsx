@@ -95,12 +95,12 @@ export default function LandingPage() {
           --primary:      #7b52c8;
           --primary-dark: #5c3d9e;
           --primary-lt:   #a87de8;
-          --light-bg:     #0e0a1a;
-          --dark2:        #1a1228;
+          --light-bg:     #afa8c6;
+          --dark2:        #525154;
           --card-bg:      #1f1535;
           --text-dark:    #e8e0f8;
           --text-light:   #9b89c4;
-          --card-bg:      #1f1535;
+          --card-bg:      #747277;
           --shadow:       0 5px 20px rgba(0,0,0,0.4);
           --radius:       15px;
           --accent:       #a87de8;
@@ -123,14 +123,14 @@ export default function LandingPage() {
         /* ── Navbar ── */
         .li-navbar {
           position: fixed; top: 0; left: 0; width: 100%;
-          background: rgba(14,10,26,0.92);
+          background: rgba(119, 116, 127, 0.92);
           backdrop-filter: blur(14px);
-          box-shadow: 0 2px 20px rgba(0,0,0,0.4);
+          box-shadow: 0 2px 20px rgba(113, 107, 107, 0.4);
           border-bottom: 1px solid var(--border);
           z-index: 1000; height: 70px; display: flex; align-items: center;
           padding: 10px 20px; transition: box-shadow 0.3s;
         }
-        .li-navbar.scrolled { box-shadow: 0 4px 30px rgba(92,61,158,0.3); }
+        .li-navbar.scrolled { box-shadow: 0 4px 30px rgba(105, 102, 112, 0.3); }
         .li-nav-container { max-width: 1200px; margin: 0 auto; width: 100%; display: flex; justify-content: space-between; align-items: center; }
         .li-nav-logo { height: 55px; width: auto; }
         .li-nav-links { display: flex; align-items: center; }
@@ -143,7 +143,7 @@ export default function LandingPage() {
           border: 2px solid var(--primary-lt) !important;
           padding: 5px 15px; border-radius: 50px;
           font-weight: bold; color: var(--primary-lt) !important;
-          background: rgba(165,120,232,0.1);
+          background: rgba(156, 145, 173, 0.1);
           transition: all .25s;
         }
         .li-nav-btn:hover { background: var(--primary); color: white !important; text-decoration: none; }
