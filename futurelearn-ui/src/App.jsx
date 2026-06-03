@@ -1,11 +1,12 @@
 import React, { Suspense, lazy, useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import AuthPage from './AuthPage';
+import LandingPage from './LandingPage'; // ta page marketing
 
 const TeacherDashboard = lazy(() => import('./TeacherDashboard'));
-const StudentJoin     = lazy(() => import('./StudentJoin'));
-const AdminDashboard  = lazy(() => import('./AdminDashboard'));
-const AIChatBot       = lazy(() => import('./components/AIChatBot'));
+const StudentJoin      = lazy(() => import('./StudentJoin'));
+const AdminDashboard   = lazy(() => import('./AdminDashboard'));
+const AIChatBot        = lazy(() => import('./components/AIChatBot'));
 
 function PathPersist() {
     const location = useLocation();
@@ -26,16 +27,17 @@ function AppContent() {
             setUser(u);
             redirectByRole(u.role);
         }
+        // Si pas de user sauvegardé → on reste sur '/' = LandingPage
+        // Pas de redirection forcée ici !
     }, []);
 
     const redirectByRole = (role) => {
         if (role === 'teacher') navigate('/teacher');
-        else if (role === 'admin') navigate('/admin');
-        else navigate('/student');
+        else if (role === 'admin')   navigate('/admin');
+        else                         navigate('/student');
     };
 
     const handleAuthSuccess = (userData) => {
-        // Pour le TeacherDashboard qui utilise encore logged_teacher
         if (userData.role === 'teacher') {
             localStorage.setItem('logged_teacher', JSON.stringify({
                 moodle_user_id: userData.id,
@@ -43,7 +45,6 @@ function AppContent() {
                 lastname: ''
             }));
         }
-        // Pour le StudentJoin qui utilise my_student_id
         if (userData.role === 'student') {
             localStorage.setItem('my_student_id', 'STU-' + userData.id);
             localStorage.setItem('student_data', JSON.stringify({
@@ -64,7 +65,7 @@ function AppContent() {
         localStorage.removeItem('my_student_id');
         localStorage.removeItem('student_data');
         setUser(null);
-        navigate('/');
+        navigate('/');  // ← retour à la LandingPage après déconnexion
     };
 
     return (
@@ -77,10 +78,14 @@ function AppContent() {
 
             <Suspense fallback={<div style={{ padding: '40px', textAlign: 'center' }}>Chargement...</div>}>
                 <Routes>
-                    {/* PAGE D'AUTH (racine) */}
-                    <Route path="/" element={<AuthPage onAuthSuccess={handleAuthSuccess} />} />
 
-                    {/* ÉTUDIANT */}
+                    {/* ══ LANDING PAGE — page d'accueil publique ══ */}
+                    <Route path="/" element={<LandingPage />} />
+
+                    {/* ══ PAGE DE CONNEXION ══ */}
+                    <Route path="/login" element={<AuthPage onAuthSuccess={handleAuthSuccess} />} />
+
+                    {/* ══ ÉTUDIANT ══ */}
                     <Route path="/join/:pin" element={<StudentJoin onLogout={handleLogout} skipAuth={true} />} />
                     <Route path="/student" element={
                         user?.role === 'student'
@@ -88,19 +93,20 @@ function AppContent() {
                             : <AuthPage onAuthSuccess={handleAuthSuccess} />
                     } />
 
-                    {/* ENSEIGNANT */}
+                    {/* ══ ENSEIGNANT ══ */}
                     <Route path="/teacher" element={
                         user?.role === 'teacher'
                             ? <TeacherDashboard user={user} onLogout={handleLogout} />
                             : <AuthPage onAuthSuccess={handleAuthSuccess} />
                     } />
 
-                    {/* ADMIN */}
+                    {/* ══ ADMIN ══ */}
                     <Route path="/admin" element={
                         user?.role === 'admin'
                             ? <AdminDashboard user={user} onLogout={handleLogout} />
                             : <AuthPage onAuthSuccess={handleAuthSuccess} />
                     } />
+
                 </Routes>
             </Suspense>
         </>

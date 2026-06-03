@@ -11,7 +11,7 @@ if (isloggedin() && !isguestuser()) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FutureLearn - Votre Plateforme d'Apprentissage Révolutionnaire</title>
+    <title>LiveInteract - Votre Plateforme d'Apprentissage Révolutionnaire</title>
     <link rel="stylesheet" href="css/style.css">
     <!-- Pour les icônes (ex: coches, flèches) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -93,7 +93,7 @@ if (isloggedin() && !isguestuser()) {
     <nav class="main-navbar">
         <div class="navbar-container">
                 <a href="#" class="navbar-brand">
-                 <img src="images/logo.png" alt="Logo FutureLearn" class="navbar-logo">
+                 <img src="images/logo.png" alt="Logo LiveInteract" class="navbar-logo">
                 </a>
             <button class="menu-toggle" aria-label="Toggle navigation">
                 <i class="fas fa-bars"></i>
@@ -119,7 +119,7 @@ if (isloggedin() && !isguestuser()) {
             <source src="videos/video_home.mp4" type="video/mp4">
         </video>
         <div class="hero-content">
-            <h1 class="animate__animated animate__fadeInDown">FUTURELEARN</h1>
+            <h1 class="animate__animated animate__fadeInDown">LIVEINTERACT</h1>
             <p class="animate__animated animate__fadeInUp animate__delay-1s">L'interaction au service de votre réussite pédagogique.</p>
             
             <div class="hero-buttons-container animate__animated animate__zoomIn animate__delay-2s">
@@ -197,7 +197,7 @@ if (isloggedin() && !isguestuser()) {
     <!-- Section "Pourquoi nous choisir ?" (Tuiles) - ID mis à jour -->
     <section id="why-us" class="homepage-section">
         <div class="section-header">
-            <h2>Pourquoi choisir FutureLearn ?</h2>
+            <h2>Pourquoi choisir LiveInteract ?</h2>
             <p>Des avantages clés qui nous distinguent et favorisent votre réussite.</p>
         </div>
         <div class="tile-grid">
@@ -281,13 +281,13 @@ if (isloggedin() && !isguestuser()) {
                         <img src="images/user_elizabeth_smith.jpg" alt="Elizabeth Smith">
                         <h3>Elizabeth AKANHOU</h3>
                         <p class="role">Directrice Pédagogique, Alpha School</p>
-                        <blockquote>"FutureLearn a révolutionné l'engagement de nos étudiants. La plateforme est intuitive et les retours en temps réel sont inestimables pour nos enseignants."</blockquote>
+                        <blockquote>"LiveInteract a révolutionné l'engagement de nos étudiants. La plateforme est intuitive et les retours en temps réel sont inestimables pour nos enseignants."</blockquote>
                     </div>
                     <div class="testimonial-card">
                         <img src="images/user_alex_johnson.jpg" alt="Alex Johnson">
                         <h3>Alex DOSSOU</h3>
                         <p class="role">Étudiant en Master, Université de Lyon</p>
-                        <blockquote>"Grâce à FutureLearn, les cours sont beaucoup plus interactifs. Je peux poser mes questions en direct et obtenir des réponses immédiates. C'est génial !"</blockquote>
+                        <blockquote>"Grâce à LiveInteract, les cours sont beaucoup plus interactifs. Je peux poser mes questions en direct et obtenir des réponses immédiates. C'est génial !"</blockquote>
                     </div>
                     <div class="testimonial-card">
                         <img src="images/user_sophie_martin.jpg" alt="Sophie Martin">
@@ -299,13 +299,13 @@ if (isloggedin() && !isguestuser()) {
                         <img src="images/user_david_chen.jpg" alt="David Chen">
                         <h3>David KOUAME</h3>
                         <p class="role">Développeur Pédagogique, EdTech Solutions</p>
-                        <blockquote>"J'apprécie la simplicité d'intégration et la robustesse de FutureLearn. C'est un outil puissant pour créer des expériences d'apprentissage immersives."</blockquote>
+                        <blockquote>"J'apprécie la simplicité d'intégration et la robustesse de LiveInteract. C'est un outil puissant pour créer des expériences d'apprentissage immersives."</blockquote>
                     </div>
                     <div class="testimonial-card">
                         <img src="images/user_maria_gonzales.jpg" alt="Maria Gonzales">
                         <h3>Maria Gonzales</h3>
                         <p class="role">Responsable Formation, Entreprise Innovante</p>
-                        <blockquote>"Nos employés sont plus engagés que jamais grâce aux sondages interactifs. FutureLearn nous aide à mesurer l'efficacité de nos formations en direct."</blockquote>
+                        <blockquote>"Nos employés sont plus engagés que jamais grâce aux sondages interactifs. LiveInteract nous aide à mesurer l'efficacité de nos formations en direct."</blockquote>
                     </div>
                     <div class="testimonial-card">
                         <img src="images/user_thomas_dupont.jpg" alt="Thomas Dupont">
@@ -345,7 +345,7 @@ if (isloggedin() && !isguestuser()) {
     <!-- Pied de page -->
     <footer class="site-footer">
         <div class="footer-content">
-            <p>&copy; 2026 FutureLearn. Tous droits réservés. L'excellence académique à portée de main.</p>
+            <p>&copy; 2026 LiveInteract. Tous droits réservés. L'excellence académique à portée de main.</p>
             <nav class="footer-nav">
                 <a href="#about-us">À propos</a>
                    <a href="confidentialite.php">Confidentialité</a>
